@@ -103,3 +103,5 @@ REVISION
 /mpc*
 /gmp*
 /isl*
+
+projects/nguyenj6/.idea/*
