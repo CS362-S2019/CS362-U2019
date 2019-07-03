@@ -768,7 +768,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
             return -1;
 
         case mine:
-            return mine(choice1, choice2, handpos, currentPlayer, state);
+            return mine(choice1, choice2, handPos, currentPlayer, state);
 
         case remodel:
             j = state->hand[currentPlayer][choice1];  //store card we will trash
@@ -833,7 +833,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
             return 0;
 
         case minion:
-            return minion(choice1, choice2, currentPlayer, state);
+            return minion(choice1, choice2, handPos, currentPlayer, state);
 
         case steward:
             if (choice1 == 1)
@@ -859,10 +859,10 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
             return 0;
 
         case tribute:
-            return tribute(currentPlayer, state);
+            return tribute(currentPlayer, nextPlayer, state);
 
         case ambassador:
-            return ambassador(choice1, choice2, handpos, currentPlayer, state);
+            return ambassador(choice1, choice2, handPos, currentPlayer, state);
 
         case cutpurse:
 
@@ -1142,7 +1142,7 @@ int baron(int choice1, int currentPlayer, struct gameState* state)
 
     return 0;
 }
-int minion(int choice1, int choice2, int currentPlayer, struct gameState* state)
+int minion(int choice1, int choice2, int handPos, int currentPlayer, struct gameState* state)
 {
     //+1 action
     state->numActions++;
@@ -1197,7 +1197,7 @@ int minion(int choice1, int choice2, int currentPlayer, struct gameState* state)
 
 }
 
-int ambassador(int choice1, int choice2, int handpos, int currentPlayer, struct gameState* state)
+int ambassador(int choice1, int choice2, int handPos, int currentPlayer, struct gameState* state)
 {
     j = 0;		//used to check if player has enough cards to discard
 
@@ -1257,7 +1257,7 @@ int ambassador(int choice1, int choice2, int handpos, int currentPlayer, struct 
     return 0;
 }
 
-tribute(int currentPlayer, struct gameState* state)
+int tribute(int currentPlayer, int nextPlayer, struct gameState* state)
 {
     int tributeRevealedCards[2] = {-1, -1}
     if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1){
@@ -1319,7 +1319,7 @@ tribute(int currentPlayer, struct gameState* state)
     return 0;
 }
 
-int mine(int choice1, int choice2, int handpos, int currentPlayer, struct gameState* state)
+int mine(int choice1, int choice2, int handPos, int currentPlayer, struct gameState* state)
 {
             j = state->hand[currentPlayer][choice1];  //store card we will trash
 
