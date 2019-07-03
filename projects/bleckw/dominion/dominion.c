@@ -819,7 +819,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
             return 0;
 
         case baron:
-            return baron(choice1, state);
+            return baron(choice1, currentPlayer, state);
 
         case great_hall:
             //+1 Card
@@ -833,7 +833,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
             return 0;
 
         case minion:
-            return minion(choice1, choice2, state);
+            return minion(choice1, choice2, currentPlayer, state);
 
         case steward:
             if (choice1 == 1)
@@ -1090,7 +1090,7 @@ int updateCoins(int player, struct gameState *state, int bonus)
 }
 
 //refactored cardEffect functions for assignment 2
-int baron(int choice1, struct gameState* state)
+int baron(int choice1, int currentPlayer, struct gameState* state)
 {
     state->numBuys++;//Increase buys by 1!
     if (choice1 > 0){//Boolean true or going to discard an estate
@@ -1142,7 +1142,7 @@ int baron(int choice1, struct gameState* state)
 
     return 0;
 }
-int minion(int choice1, int choice2, struct gameState* state)
+int minion(int choice1, int choice2, int currentPlayer, struct gameState* state)
 {
     //+1 action
     state->numActions++;
