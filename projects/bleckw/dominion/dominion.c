@@ -1,6 +1,7 @@
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include "rngs.h"
+#include "dominion_card_effects.h"
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
