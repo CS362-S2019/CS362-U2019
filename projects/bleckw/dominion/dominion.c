@@ -1303,11 +1303,12 @@ int tribute(int currentPlayer, int nextPlayer, struct gameState* state)
     }
 
     for (i = 0; i <= 2; i ++){
-        if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold){//Treasure cards
+        int revealedCard = tributeRevealedCards[i];
+        if (revealedCard == copper || revealedCard == silver || revealedCard == gold){//Treasure cards
             state->coins += 2;
         }
 
-        else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens || tributeRevealedCards[i] == great_hall){//Victory Card Found
+        else if (revealedCard == estate || revealedCard == duchy || revealedCard == province || revealedCard == gardens || revealedCard == great_hall){//Victory Card Found
             drawCard(currentPlayer, state);
             drawCard(currentPlayer, state);
         }
