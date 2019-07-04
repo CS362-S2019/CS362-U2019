@@ -3,7 +3,7 @@
 
 int baron(int choice1, int currentPlayer, struct gameState* state);
 
-int minion(int choice1, int choice2, int handPos, int currentPlayer, struct gameState* state);
+int minion(int choice2, int choice1, int handPos, int currentPlayer, struct gameState* state);
 
 int ambassador(int choice1, int choice2, int handPos, int currentPlayer, struct gameState* state);
 
