@@ -128,4 +128,10 @@ int getWinners(int players[MAX_PLAYERS], struct gameState *state);
 /* Set array position of each player who won (remember ties!) to
    1, others to 0 */
 
+
+// REFACTORING CARDS
+int playBaron(int choice1, struct gameState *state);
+/*Refactored Baron card, takes in the choice1 and gamestate*/
+
+
 #endif
