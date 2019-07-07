@@ -133,5 +133,10 @@ int getWinners(int players[MAX_PLAYERS], struct gameState *state);
 int playBaron(int choice1, struct gameState *state);
 /*Refactored Baron card, takes in the choice1 and gamestate*/
 
+int playMinion(int choice1, struct gameState *state, int handPos, int currentPlayer);
+/*Refactored Minion card, takes in the choice1, gamestate, handPos, and currentPlayer*/
+
+int playAmbassador(struct gameState *state, int choice1 int handPos, int currentPlayer);
+/*Refactored Ambassador card, takes in the gamestate, choice1, handPos, and currentPlayer*/
 
 #endif

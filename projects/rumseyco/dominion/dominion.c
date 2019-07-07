@@ -1380,4 +1380,154 @@ int playBaron(int choice1, struct gameState state) {
 }
 
 
+int playMinion(int choice1, struct gameState state, int handPos, int currentPlayer) {
+	//increase actions
+	state->numActions++;
+
+	//discard card from hand
+	discardCard(handPos, currentPlayer, state, 0);
+
+	// +2 coins
+	if (choice1 == 1) {
+		state->coins = state->coins + 2;
+	}
+
+	else		//discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
+	{
+		//discard hand
+		while (numHandCards(state) > 0)
+		{
+			discardCard(handPos, currentPlayer, state, 0);
+		}
+
+		//draw 4
+		for (i = 0; i < 4; i++)
+		{
+			drawCard(currentPlayer, state);
+		}
+
+		//other players discard hand and redraw if hand size > 4
+		for (i = 0; i < state->numPlayers; i++)
+		{
+			if (i != currentPlayer)
+			{
+				if (state->handCount[i] > 4)
+				{
+					//discard hand
+					while (state->handCount[i] > 0)
+					{
+						discardCard(handPos, i, state, 0);
+					}
+
+					//draw 4
+					for (j = 0; j < 4; j++)
+					{
+						drawCard(i, state);
+					}
+				}
+			}
+		}
+
+	}
+
+	return 0;
+}
+
+int playAmbassador(struct gameState state, int choice1, int handPos, int currentPlayer) {
+	j = 0;		//used to keep track of how many Ambassador cards are in player's hand
+	k = 0;      //used to keep track of the number of selected cards moved to supply from player's hand
+	
+	for (i = 0; i < state->handCount[currentPlayer]; i++)
+	{
+		if (i != handPos && state->hand[currentPlayer][i] == choice1)
+		{
+			j++;
+		}
+	}
+	if (j > 0) { //trash the extra selected cards in hand upto 2 cards, count the cards trashed
+		for (i = 0; i < 2; i++) {
+			if (i != handPos && state->hand[currentPlayer][i] == choice1)
+			{
+				discardCard(i, currentPlayer, state, 1) //trash the ambassador
+					k++;
+			}
+		}
+
+		//increase supply count for choosen card by amount being discarded
+		state->supplyCount[choice1] += k;
+	}
+
+	//each other player gains a copy of selected card
+	for (i = 0; i < state->numPlayers; i++)
+	{
+		if (i != currentPlayer)
+		{
+			gainCard(choice1, state, 1, i);
+		}
+	}
+
+
+	return 0;
+}
+
+
+
 //end of dominion.c
+
+case ambassador:
+	j = 0;		//used to check if player has enough cards to discard
+
+	if (choice2 > 2 || choice2 < 0)
+	{
+		return -1;
+	}
+
+	if (choice1 == handPos)
+	{
+		return -1;
+	}
+
+	for (i = 0; i < state->handCount[currentPlayer]; i++)
+	{
+		if (i != handPos && i == state->hand[currentPlayer][choice1] && i != choice1)
+		{
+			j++;
+		}
+	}
+	if (j < choice2)
+	{
+		return -1;
+	}
+
+	if (DEBUG)
+		printf("Player %d reveals card number: %d\n", currentPlayer, state->hand[currentPlayer][choice1]);
+
+	//increase supply count for choosen card by amount being discarded
+	state->supplyCount[state->hand[currentPlayer][choice1]] += choice2;
+
+	//each other player gains a copy of revealed card
+	for (i = 0; i < state->numPlayers; i++)
+	{
+		if (i != currentPlayer)
+		{
+			gainCard(state->hand[currentPlayer][choice1], state, 0, i);
+		}
+	}
+
+	//discard played card from hand
+	discardCard(handPos, currentPlayer, state, 0);
+
+	//trash copies of cards returned to supply
+	for (j = 0; j < choice2; j++)
+	{
+		for (i = 0; i < state->handCount[currentPlayer]; i++)
+		{
+			if (state->hand[currentPlayer][i] == state->hand[currentPlayer][choice1])
+			{
+				discardCard(i, currentPlayer, state, 1);
+				break;
+			}
+		}
+	}
+
+	return 0;
