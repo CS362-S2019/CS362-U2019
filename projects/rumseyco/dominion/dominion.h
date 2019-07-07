@@ -143,6 +143,6 @@ int playTribute(struct gameState *state, int handPos, int currentPlayer, int nex
 /*Refactored Tribute card, takes in the gamestate, handPos, currentPlayer, nextPlayer, and tributeRevealedCards*/
 
 
-int playMine(struct gameState *state, int handPos, int currentPlayer, int choice1, int choice2)
+//int playMine(struct gameState *state, int handPos, int currentPlayer, int choice1, int choice2)
 /*Refactored Mine card, takes in the gamestate, handPos, currentPlayer, choice1, and choice2*/
 #endif

@@ -1311,6 +1311,7 @@ int playTribute(struct gameState *state, int handPos, int currentPlayer, int nex
 	return 0;
 }
 
+/*
 int playMine(struct gameState *state, int handPos, int currentPlayer, int choice1, int choice2) {
 	
 	int j = state->hand[currentPlayer][choice1];  //store card we will trash
@@ -1342,5 +1343,6 @@ int playMine(struct gameState *state, int handPos, int currentPlayer, int choice
 	
 	return 0;
 }
+*/
 
 //end of dominion.c
