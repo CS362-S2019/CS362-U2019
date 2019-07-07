@@ -1429,11 +1429,12 @@ int minionFunc(int choice1, int choice2, int i, int j, struct gameState *state, 
       if (choice1)    //+2 coins
   {
     state->coins = state->coins + 2;
+    return 0;   //Intentional bug #3
   }
       
       else if (choice2)   //discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
   {
-    return 0;   //Intentional bug #3
+    return 0;   //Intentional bug #4
     //discard hand
     while(numHandCards(state) > 0)
       {
@@ -1444,7 +1445,6 @@ int minionFunc(int choice1, int choice2, int i, int j, struct gameState *state, 
     for (i = 0; i < 4; i++)
       {
         drawCard(currentPlayer, state);
-        return 0;   //Intentional Bug #4
       }
         
     //other players discard hand and redraw if hand size > 4
