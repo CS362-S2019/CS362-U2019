@@ -114,6 +114,8 @@ int fullDeckCount(int player, int card, struct gameState *state);
 
 int whoseTurn(struct gameState *state);
 
+int whoseNext(struct gameState* state);
+
 int endTurn(struct gameState *state);
 /* Must do phase C and advance to next player; do not advance whose turn
    if game is over */
@@ -127,5 +129,17 @@ int scoreFor(int player, struct gameState *state);
 int getWinners(int players[MAX_PLAYERS], struct gameState *state);
 /* Set array position of each player who won (remember ties!) to
    1, others to 0 */
+   
+int playBaron(struct gameState* state, int handPos, int discardEstate);
+
+int playMine(struct gameState* state, int handPos, int cardToTrash, int cardToTake);
+
+int playTribute(struct gameState* state, int handPos);
+
+int playAmbassador(struct gameState* state, int handPos, int cardToReturn, int numCopies);
+
+int playMinion(struct gameState* state, int choice);
+
+int findCard(struct gameState* state, int cardType);
 
 #endif
