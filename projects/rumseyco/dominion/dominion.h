@@ -139,4 +139,10 @@ int playMinion(int choice1, struct gameState *state, int handPos, int currentPla
 int playAmbassador(struct gameState *state, int choice1 int handPos, int currentPlayer);
 /*Refactored Ambassador card, takes in the gamestate, choice1, handPos, and currentPlayer*/
 
+int playTribute(struct gameState *state, int handPos, int currentPlayer, int nextPlayer, int *tributeRevealedCards);
+/*Refactored Tribute card, takes in the gamestate, handPos, currentPlayer, nextPlayer, and tributeRevealedCards*/
+
+
+int playMine(struct gameState *state, int handPos, int currentPlayer, int choice1, int choice2)
+/*Refactored Mine card, takes in the gamestate, handPos, currentPlayer, choice1, and choice2*/
 #endif
