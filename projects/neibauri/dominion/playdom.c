@@ -5,8 +5,11 @@
 
 int main (int argc, char** argv) {
   struct gameState G;
-  int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse,
-           sea_hag, tribute, smithy};
+  //int k[10] = { baron, gardens, embargo, village, minion, mine, cutpurse,
+		//   sea_hag, tribute, ambassador};
+//original code, modified in week2
+int k[10] = { adventurer, gardens, embargo, village, minion, mine, cutpurse,
+		 sea_hag, tribute, smithy };
 
   printf ("Starting game.\n");
 
@@ -69,6 +72,7 @@ int main (int argc, char** argv) {
         printf("0: bought gold\n");
         buyCard(gold, &G);
       }
+	  //was smithy, changed to one of 5 types for testing
       else if ((money >= 4) && (numSmithies < 2)) {
         printf("0: bought smithy\n");
         buyCard(smithy, &G);
