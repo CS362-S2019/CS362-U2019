@@ -1,13 +1,28 @@
+# 
+# Dominion Makefile
+# 2019
+# 
+# 
+
+# Variables
+BaseDominion_Headers= dominion.h
+BaseDominion_Source= dominion.c cardHelpers/cardEffect.o
+BaseDominion_Depend= $(BaseDominion_Headers) $(BaseDominion_Source) rngs.o
+
+
 CFLAGS= -Wall -fpic -coverage -lm -std=c99
 
 rngs.o: rngs.h rngs.c
 	gcc -c rngs.c -g  $(CFLAGS)
 
-dominion.o: dominion.h dominion.c rngs.o
-	gcc -c dominion.c -g  $(CFLAGS)
+dominion.o: $(BaseDominion_Depend)
+	gcc -c $(BaseDominion_Source) -g  $(CFLAGS)
+
+cardEffect.o: cardHelpers/cardEffect.h
+	gcc -c cardHelpers/cardEffect.c -g $(CFLAGS)
 
 playdom: dominion.o playdom.c
-	gcc -o playdom playdom.c -g dominion.o rngs.o $(CFLAGS)
+	gcc -o playdom playdom.c -g dominion.o rngs.o cardEffect.o $(CFLAGS)
 #To run playdom you need to entere: ./playdom <any integer number> like ./playdom 10*/
 testDrawCard: testDrawCard.c dominion.o rngs.o
 	gcc  -o testDrawCard -g  testDrawCard.c dominion.o rngs.o $(CFLAGS)
@@ -31,7 +46,7 @@ runtests: testDrawCard
 
 
 player: player.c interface.o
-	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
+	gcc -o player player.c -g  dominion.o rngs.o cardEffect.o interface.o $(CFLAGS)
 
 all: playdom player 
 

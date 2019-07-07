@@ -25,7 +25,7 @@ int main (int argc, char** argv) {
   printf ("%ld: hand[0][0]\n", ((long)&(G.hand[0][0]))-(long)(&G));
   printf ("%ld: deck[0][0]\n", ((long)&(G.deck[0][0]))-(long)(&G));
   printf ("%ld: discard[0][0]\n", ((long)&(G.discard[0][0]))-(long)(&G));
-  printf ("%ld: playerCards[0]\n", ((long)&(G.playedCards[0]))-(long)(&G));
+  printf ("%ld: playerCards[0]\n", ((long)&(G.tabledCards[0]))-(long)(&G));
 
   for (i = 0; i < sizeof(struct gameState); i++) {
     if (((char*)&G)[i] == 'z') {

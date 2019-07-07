@@ -103,3 +103,14 @@ REVISION
 /mpc*
 /gmp*
 /isl*
+
+# VSCode Directory for Tristan's Editor
+.vscode/**
+
+# Named Binaries
+projects/hilbertt/dominion/playdom
+projects/hilbertt/dominion/*/playdom
+projects/hilbertt/dominion/player
+projects/hilbertt/dominion/*/player
+projects/hilbertt/dominion/badTestDrawCard
+projects/hilbertt/dominion/*/badTestDrawCard

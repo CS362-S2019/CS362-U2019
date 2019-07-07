@@ -175,12 +175,12 @@ void printDeck(int player, struct gameState *game) {
 }
 
 void printPlayed(int player, struct gameState *game) {
-  int playedCount = game->playedCardCount;
+  int playedCount = game->tabledCardCount;
   int playedIndex;
   printf("Player %d's played cards: \n", player);
   if(playedCount > 0) printf("#  Card\n");
   for(playedIndex = 0; playedIndex < playedCount; playedIndex++) {
-    int card = game->playedCards[playedIndex];
+    int card = game->tabledCards[playedIndex];
     char name[MAX_STRING_LENGTH];
     cardNumToName(card, name);
     printf("%-2d %-13s \n", playedIndex, name);
