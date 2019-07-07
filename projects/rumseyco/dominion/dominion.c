@@ -819,7 +819,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case baron:
-		playBaron(choice1, state);
+		playBaron(choice1, state, currentPlayer);
 		
     case great_hall:
       //+1 Card
@@ -1093,7 +1093,7 @@ int updateCoins(int player, struct gameState *state, int bonus)
 // REFACTORED CARDS
 
 
-int playBaron(int choice1, struct gameState *state) {
+int playBaron(int choice1, struct gameState *state, int currentPlayer) {
 	state->numBuys++; //Increase buys by 1.
 	if (choice1 == 1) { //Boolean true or trying to discard an estate
 		int p = 0;//Iterator for hand!

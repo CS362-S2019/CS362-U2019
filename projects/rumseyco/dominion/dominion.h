@@ -130,7 +130,7 @@ int getWinners(int players[MAX_PLAYERS], struct gameState *state);
 
 
 // REFACTORING CARDS
-int playBaron(int choice1, struct gameState *state);
+int playBaron(int choice1, struct gameState *state, int currentPlayer);
 /*Refactored Baron card, takes in the choice1 and gamestate*/
 
 int playMinion(int choice1, struct gameState *state, int handPos, int currentPlayer);
