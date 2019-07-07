@@ -1251,7 +1251,7 @@ int playAmbassador(struct gameState state, int choice1, int handPos, int current
 }
 
 
-int playTribute(struct gameState *state, int handPos, int currentPlayer, int nextPlayer, int *[2] tributeRevealedCards) {
+int playTribute(struct gameState *state, int handPos, int currentPlayer, int nextPlayer, int (*tributeRevealedCards)[2]) {
 	if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1) {
 		if (state->deckCount[nextPlayer] > 0) {
 			tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];
