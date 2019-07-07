@@ -659,7 +659,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   int currentPlayer = whoseTurn(state);
   int nextPlayer = currentPlayer + 1;
 
-  int tributeRevealedCards[2] = {-1, -1};
+  //int tributeRevealedCards[2] = {-1, -1};
   int temphand[MAX_HAND];// moved above the if statement
   int drawntreasure=0;
   int cardDrawn;
@@ -775,7 +775,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
 //ASSIGNMENT 2 CHANGE - FUNCTION CALL TO MINE()
     case mine:
-      mine(state, choice1, choice2);
+      mineRefactor(state, choice1, choice2, handPos);
       return 0;
 
     case remodel:
@@ -828,7 +828,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
 //ASSIGNMENT 2 CHANGE - FUNCTION CALL TO BARON
     case baron:
-      baron(state, choice1);
+      baronRefactor(state, choice1);
       return 0;
 
     case great_hall:
@@ -844,7 +844,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
 //ASSIGNMENT 2 CHANGE - FUNCTION CALL TO MINION()
     case minion:
-      minion(state, handPos);
+      minionRefactor(state, handPos, choice1, choice2);
       return 0;
 
     case steward:
@@ -872,12 +872,12 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
 //ASSIGNMENT 2 CHANGE - FUNCTION CALL TO TRIBUTE()
     case tribute:
-      tribute(state);
+      tributeRefactor(state);
       return 0;
 
 //ASSIGNMENT 2 CHANGE - FUNCTION CALL TO AMBASSAOR()
     case ambassador:
-      ambassador(state, choice1, choice2, handPos);
+      ambassadorRefactor(state, choice1, choice2, handPos);
       return 0;
 
     case cutpurse:
@@ -1107,7 +1107,7 @@ int updateCoins(int player, struct gameState *state, int bonus)
 /* NEW FUNCTIONS FOR ASSIGNMENT 2 */
 
 //CASE MINE
-int mine(struct gameState *state, int choice1, int choice2) {
+int mineRefactor(struct gameState *state, int choice1, int choice2, int handPos) {
       int currentPlayer = whoseTurn(state); //declate currentPlayer variable from cardEffect
       int j = state->hand[currentPlayer][choice1];  //store card we will trash
       int i;
@@ -1127,7 +1127,8 @@ int mine(struct gameState *state, int choice1, int choice2) {
 	  return -1;
 	}
 
-      gainCard(choice2, state, 2, currentPlayer);
+      /*Bug 1: changed choice2 parameter to choice1 */
+      gainCard(choice1, state, 2, currentPlayer);
 
       //discard card from hand
       discardCard(handPos, currentPlayer, state, 0);
@@ -1135,7 +1136,8 @@ int mine(struct gameState *state, int choice1, int choice2) {
       //discard trashed card
       for (i = 0; i < state->handCount[currentPlayer]; i++)
 	{
-	  if (state->hand[currentPlayer][i] == j)
+    /*Bug 2: changed == j to != j */
+	  if (state->hand[currentPlayer][i] != j)
 	    {
 	      discardCard(i, currentPlayer, state, 0);
 	      break;
@@ -1146,12 +1148,14 @@ int mine(struct gameState *state, int choice1, int choice2) {
 }
 
 //CASE BARON
-int baron(struct gameState *state, int choice1) {
+int baronRefactor(struct gameState *state, int choice1) {
       int currentPlayer = whoseTurn(state); //declate currentPlayer variable from cardEffect
       state->numBuys++;//Increase buys by 1!
       if (choice1 > 0){//Boolean true or going to discard an estate
 	int p = 0;//Iterator for hand!
-	int card_not_discarded = 1;//Flag for discard set!
+
+    /*Bug 3: changed card_not_discarded variable equal to 0 */
+	int card_not_discarded = 0;//Flag for discard set!
 	while(card_not_discarded){
 	  if (state->hand[currentPlayer][p] == estate){//Found an estate card!
 	    state->coins += 4;//Add 4 coins to the amount of coins
@@ -1179,8 +1183,9 @@ int baron(struct gameState *state, int choice1) {
 	    card_not_discarded = 0;//Exit the loop
 	  }
 
+      /*Bug 4: changed p variable from increment to decrement */
 	  else{
-	    p++;//Next card
+	    p--;//Next card
 	  }
 	}
       }
@@ -1199,7 +1204,7 @@ int baron(struct gameState *state, int choice1) {
 }
 
 //CASE MINION
-int minion(struct gameState *state, int handPos) {
+int minionRefactor(struct gameState *state, int handPos, int choice1, int choice2) {
       int currentPlayer = whoseTurn(state); //declate currentPlayer variable from cardEffect
       int i;
       int j;
@@ -1210,9 +1215,10 @@ int minion(struct gameState *state, int handPos) {
       //discard card from hand
       discardCard(handPos, currentPlayer, state, 0);
 
+      /*Bug 5: deleted +2, removed the add coin addition */
       if (choice1)		//+2 coins
 	{
-	  state->coins = state->coins + 2;
+	  state->coins = state->coins;
 	}
 
       else if (choice2)		//discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
@@ -1232,7 +1238,8 @@ int minion(struct gameState *state, int handPos) {
 	  //other players discard hand and redraw if hand size > 4
 	  for (i = 0; i < state->numPlayers; i++)
 	    {
-	      if (i != currentPlayer)
+          /*Bug 6: changed != to ==, if iterrator = currentPlayer, doesn't ever each other players */
+	      if (i == currentPlayer)
 		{
 		  if ( state->handCount[i] > 4 )
 		    {
@@ -1256,7 +1263,7 @@ int minion(struct gameState *state, int handPos) {
 }
 
 //CASE AMBASSADOR
-int ambassador(struct gameState *state, int choice1, int choice2, int handPos) {
+int ambassadorRefactor(struct gameState *state, int choice1, int choice2, int handPos) {
       int currentPlayer = whoseTurn(state); //declate currentPlayer variable from cardEffect
       int j = 0;		//used to check if player has enough cards to discard
       int i;
@@ -1292,14 +1299,15 @@ int ambassador(struct gameState *state, int choice1, int choice2, int handPos) {
       //each other player gains a copy of revealed card
       for (i = 0; i < state->numPlayers; i++)
 	{
-	  if (i != currentPlayer)
+      /*Bug 7: changed != to ==, if iterrator = currentPlayer, doesn't ever each other players */
+	  if (i == currentPlayer)
 	    {
 	      gainCard(state->hand[currentPlayer][choice1], state, 0, i);
 	    }
 	}
-
+      /*Bug 8: commented out function call to discardCard, current card wont be discarded */
       //discard played card from hand
-      discardCard(handPos, currentPlayer, state, 0);
+      //discardCard(handPos, currentPlayer, state, 0);
 
       //trash copies of cards returned to supply
       for (j = 0; j < choice2; j++)
@@ -1318,11 +1326,11 @@ int ambassador(struct gameState *state, int choice1, int choice2, int handPos) {
 }
 
 //CASE TRIBUTE
-int tribute(struct gameState *state) {
-      int tributeRevealedCards[2] = {-1, -1};
+int tributeRefactor(struct gameState *state) {
       int currentPlayer = whoseTurn(state); //declate currentPlayer variable from cardEffect
       int nextPlayer = currentPlayer + 1;
       int i;
+      int tributeRevealedCards[2] = {-1, -1};
 
       if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1){
 	if (state->deckCount[nextPlayer] > 0){
@@ -1349,8 +1357,8 @@ int tribute(struct gameState *state) {
 	    state->discard[nextPlayer][i] = -1;
 	    state->discardCount[nextPlayer]--;
 	  }
-
-	  shuffle(nextPlayer,state);//Shuffle the deck
+      /*Bug 9: commented out call to shuffle function, so card deck will not be shuffled */
+	  //shuffle(nextPlayer,state);//Shuffle the deck
 	}
 	tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];
 	state->deck[nextPlayer][state->deckCount[nextPlayer]--] = -1;
@@ -1366,7 +1374,7 @@ int tribute(struct gameState *state) {
 	tributeRevealedCards[1] = -1;
       }
 
-      for (i = 0; i <= 2; i ++){
+      for (i = 0; i <= 2; i++){
 	if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold){//Treasure cards
 	  state->coins += 2;
 	}
@@ -1375,8 +1383,9 @@ int tribute(struct gameState *state) {
 	  drawCard(currentPlayer, state);
 	  drawCard(currentPlayer, state);
 	}
+    /*Bug 10: removed +2, else statement won't reveal top 2 cards */
 	else{//Action Card
-	  state->numActions = state->numActions + 2;
+	  state->numActions = state->numActions;
 	}
       }
 
