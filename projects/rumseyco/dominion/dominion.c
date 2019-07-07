@@ -1093,7 +1093,7 @@ int updateCoins(int player, struct gameState *state, int bonus)
 // REFACTORED CARDS
 
 
-int playBaron(int choice1, struct gameState state) {
+int playBaron(int choice1, struct gameState *state) {
 	state->numBuys++; //Increase buys by 1.
 	if (choice1 == 1) { //Boolean true or trying to discard an estate
 		int p = 0;//Iterator for hand!
