@@ -136,7 +136,7 @@ int playBaron(int choice1, struct gameState *state);
 int playMinion(int choice1, struct gameState *state, int handPos, int currentPlayer);
 /*Refactored Minion card, takes in the choice1, gamestate, handPos, and currentPlayer*/
 
-int playAmbassador(struct gameState *state, int choice1 int handPos, int currentPlayer);
+int playAmbassador(struct gameState *state, int choice1, int handPos, int currentPlayer);
 /*Refactored Ambassador card, takes in the gamestate, choice1, handPos, and currentPlayer*/
 
 int playTribute(struct gameState *state, int handPos, int currentPlayer, int nextPlayer, int *tributeRevealedCards);
