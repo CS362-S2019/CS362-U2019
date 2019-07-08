@@ -1254,11 +1254,11 @@ int playAmbassador(struct gameState *state, int choice1, int handPos, int curren
 int playTribute(struct gameState *state, int handPos, int currentPlayer, int nextPlayer, int (*tributeRevealedCards)[2]) {
 	if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1) {
 		if (state->deckCount[nextPlayer] > 0) {
-			tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];
+			tributeRevealedCards->[0] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];
 			state->deckCount[nextPlayer]--;
 		}
 		else if (state->discardCount[nextPlayer] > 0) {
-			tributeRevealedCards[0] = state->discard[nextPlayer][state->discardCount[nextPlayer] - 1];
+			tributeRevealedCards->[0] = state->discard[nextPlayer][state->discardCount[nextPlayer] - 1];
 			state->discardCount[nextPlayer]--;
 		}
 		else {
@@ -1280,18 +1280,18 @@ int playTribute(struct gameState *state, int handPos, int currentPlayer, int nex
 
 			shuffle(nextPlayer, state);//Shuffle the deck
 		}
-		tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];
+		tributeRevealedCards->[0] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];
 		state->deck[nextPlayer][state->deckCount[nextPlayer]--] = -1;
 		state->deckCount[nextPlayer]--;
-		tributeRevealedCards[1] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];
+		tributeRevealedCards->[1] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];
 		state->deck[nextPlayer][state->deckCount[nextPlayer]--] = -1;
 		state->deckCount[nextPlayer]--;
 	}
 
-	if (tributeRevealedCards[0] == tributeRevealedCards[1]) {//If we have a duplicate card, just drop one 
+	if (tributeRevealedCards->[0] == tributeRevealedCards[1]) {//If we have a duplicate card, just drop one 
 		state->playedCards[state->playedCardCount] = tributeRevealedCards[1];
 		state->playedCardCount++;
-		tributeRevealedCards[1] = -1;
+		tributeRevealedCards->[1] = -1;
 	}
 
 	for (int i = 0; i <= 2; i++) {
