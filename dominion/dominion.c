@@ -1014,9 +1014,9 @@ int ambassador(int choice1, int choice2, int currentPlayer, struct gameState *st
   for (i = 0; i < state->numPlayers; i++)
   {
     if (i != currentPlayer)
-      {
-        gainCard(state->hand[currentPlayer][choice1], state, 0, i);
-      }
+    {
+      gainCard(state->hand[currentPlayer][choice1], state, 0, i);
+    }
   }
 
   //discard played card from hand
@@ -1069,10 +1069,10 @@ int mine(int choice1, int choice2, int currentPlayer, struct gameState *state, i
   for (i = 0; i < state->handCount[currentPlayer]; i++)
   {
     if (state->hand[currentPlayer][i] == j)
-      {
-        discardCard(i, currentPlayer, state, 0);			
-        break;
-      }
+    {
+      discardCard(i, currentPlayer, state, 0);			
+      break;
+    }
   }
   
   return 0;
