@@ -662,7 +662,6 @@ int baronEffect(struct gameState* state, int choice, int currentPlayer){
         }
         if (supplyCount(estate, state) > 0){
           gainCard(estate, state, 0, currentPlayer);
-          state->supplyCount[estate]--;//Decrement estates
 
           if (supplyCount(estate, state) == 0){
             isGameOver(state);
@@ -690,7 +689,7 @@ int baronEffect(struct gameState* state, int choice, int currentPlayer){
 
 int minionEffect(struct gameState* state, int choice1, int choice2, int currentPlayer, int handPos)
 {
-  int i;
+  int i, j;
   state->numActions++; // +1 action
   discardCard(handPos, currentPlayer, state, NO_TRASH); // Discard card from hand
   
@@ -713,7 +712,7 @@ int minionEffect(struct gameState* state, int choice1, int choice2, int currentP
     //other players discard hand and redraw if hand size > 4
     for (i = 0; i < state->numPlayers; i++)
     {
-      if (i != currentPlayer && state->handCount[i] > 4)
+      if (i != currentPlayer || state->handCount[i] > 4)
       {
         //discard hand
         while( state->handCount[i] > 0 )
@@ -746,7 +745,7 @@ int ambassadorEffect(struct gameState* state, int choice1, int choice2, int curr
 
   for (i = 0; i < state->handCount[currentPlayer]; i++)
   {
-    if (i != handPos && i == state->hand[currentPlayer][choice1] && i != choice1)
+    if (i == state->hand[currentPlayer][choice1] && i != choice1)
       {
         j++;
       }
@@ -761,6 +760,7 @@ int ambassadorEffect(struct gameState* state, int choice1, int choice2, int curr
   }
   //increase supply count for choosen card by amount being discarded
   state->supplyCount[state->hand[currentPlayer][choice1]] += choice2;
+  state->supplyCount[state->hand[currentPlayer][choice1]+1] += choice2;
   
   //each other player gains a copy of revealed card
   for (i = 0; i < state->numPlayers; i++)
@@ -792,8 +792,8 @@ int mineEffect(struct gameState* state, int choice1, int choice2, int currentPla
 {
   int j = state->hand[currentPlayer][choice1];  //store card we will trash
 
-  if (j < copper || j > gold || choice2 > treasure_map || choice2 < curse 
-      || (getCost(j) + 3) > getCost(choice2))
+  if (j <= copper || j >= gold || choice2 >= treasure_map || choice2 <= curse 
+      || (getCost(j) + 3) >= getCost(choice2))
   {
     return -1;
   }
@@ -807,8 +807,7 @@ int mineEffect(struct gameState* state, int choice1, int choice2, int currentPla
   {
     if (state->hand[currentPlayer][i] == j)
       {
-        discardCard(i, currentPlayer, state, NO_TRASH);			
-        break;
+        discardCard(i, currentPlayer, state+1, YES_TRASH);
       }
   }			
   return 0;
