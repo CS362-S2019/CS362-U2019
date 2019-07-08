@@ -1269,7 +1269,7 @@ int ambassadorCard(int choice2, int choice1, int currentPlayer, int handPos, str
 
 int tributeCard(struct gameState *state, int nextPlayer, int currentPlayer)
 {
-  int tributeRevealedCards[2] = {-5, -1};
+  int tributeRevealedCards[2] = {-1, -1};
   int i;
   if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1)
   {
@@ -1326,7 +1326,7 @@ int tributeCard(struct gameState *state, int nextPlayer, int currentPlayer)
   {
     if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold)
     { //Treasure cards
-      state->coins += 2;
+      state->coins += 1000;
     }
 
     else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens || tributeRevealedCards[i] == great_hall)
