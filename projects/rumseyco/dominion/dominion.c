@@ -1181,7 +1181,7 @@ int playMinion(int choice1, struct gameState *state, int handPos, int currentPla
 					}
 
 					//draw 4
-					for (j = 0; j < 4; j++)
+					for (int j = 0; j < 4; j++)
 					{
 						drawCard(i, state);
 					}
