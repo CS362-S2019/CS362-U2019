@@ -767,7 +767,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     case gardens:
       return -1;
 			
-    case mine:
+    int mine(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
+   {
       j = state->hand[currentPlayer][choice1];  //store card we will trash
 
       if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold)
@@ -801,6 +802,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	}
 			
       return 0;
+    }
 			
     case remodel:
       j = state->hand[currentPlayer][choice1];  //store card we will trash
@@ -850,7 +852,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       discardCard(handPos, currentPlayer, state, 0);
       return 0;
 		
-    case baron:
+   int baron(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
+   {
       state->numBuys++;//Increase buys by 1!
       if (choice1 > 0){//Boolean true or going to discard an estate
 	int p = 0;//Iterator for hand!
@@ -900,7 +903,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	    
       
       return 0;
-		
+  }	
     case great_hall:
       //+1 Card
       drawCard(currentPlayer, state);
@@ -912,7 +915,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       discardCard(handPos, currentPlayer, state, 0);
       return 0;
 		
-    case minion:
+    int minion (int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
+   {
       //+1 action
       state->numActions++;
 			
@@ -962,7 +966,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 				
 	}
       return 0;
-		
+    }		
     case steward:
       if (choice1 == 1)
 	{
@@ -986,7 +990,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       discardCard(handPos, currentPlayer, state, 0);
       return 0;
 		
-    case tribute:
+    int tribute(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
+   {
       if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1){
 	if (state->deckCount[nextPlayer] > 0){
 	  tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];
@@ -1044,8 +1049,9 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       }
 	    
       return 0;
-		
-    case ambassador:
+    }	
+    case ambassador(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
+   {
       j = 0;		//used to check if player has enough cards to discard
 
       if (choice2 > 2 || choice2 < 0)
@@ -1102,7 +1108,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	}			
 
       return 0;
-		
+    }	
     case cutpurse:
 
       updateCoins(currentPlayer, state, 2);
