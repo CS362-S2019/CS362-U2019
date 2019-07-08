@@ -8,6 +8,9 @@
 
 #define MAX_PLAYERS 4
 
+#define NO_TRASH 0
+#define YES_TRASH 1
+
 #define DEBUG 0
 
 /* http://dominion.diehrstraits.com has card texts */
