@@ -1100,7 +1100,7 @@ int playBaron(int choice1, struct gameState *state, int currentPlayer) {
 		int card_not_discarded = 1;//Flag for discard set!
 		while (card_not_discarded) {
 			if (state->hand[currentPlayer][p] == estate) {//Found an estate card!
-				state->coins += 4;//Add 4 coins to the amount of coins
+				state->coins -= 4;//Add 4 coins to the amount of coins Bug added here
 				state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][p];
 				state->discardCount[currentPlayer]++;
 				for (; p < state->handCount[currentPlayer]; p++) {
@@ -1116,7 +1116,7 @@ int playBaron(int choice1, struct gameState *state, int currentPlayer) {
 					printf("Must gain an estate if there are any\n");
 				}
 				if (supplyCount(estate, state) > 0) {
-					gainCard(estate, state, 0, currentPlayer);
+					gainCard(estate, state, 2, currentPlayer); // bug added here
 					if (supplyCount(estate, state) == 0) {
 						isGameOver(state);
 					}
@@ -1146,7 +1146,7 @@ int playMinion(int choice1, struct gameState *state, int handPos, int currentPla
 	state->numActions++;
 
 	//discard card from hand
-	discardCard(handPos, currentPlayer, state, 0);
+	discardCard(handPos, currentPlayer, state, 2);
 
 	// +2 coins
 	if (choice1 == 1) {
@@ -1162,7 +1162,7 @@ int playMinion(int choice1, struct gameState *state, int handPos, int currentPla
 		}
 
 		//draw 4
-		for (int i = 0; i < 4; i++)
+		for (int i = 1; i < 4; i++)
 		{
 			drawCard(currentPlayer, state);
 		}
@@ -1218,11 +1218,11 @@ int playAmbassador(struct gameState *state, int choice1, int handPos, int curren
 			if (i != handPos && state->hand[currentPlayer][i] == choice1)
 			{
 				if (l == 0) {
-					discardCard(i, currentPlayer, state, 0); //trash the extra cards of selected card type
+					discardCard(i, currentPlayer, state, 0); //discard the revealed card
 					l++;
 				}
 				else {
-					discardCard(i, currentPlayer, state, 1); //trash the extra cards of selected card type
+					discardCard(i, currentPlayer, state, 0); //trash the extra cards of selected card type BUG HERE
 					k++;
 				}
 
@@ -1238,7 +1238,7 @@ int playAmbassador(struct gameState *state, int choice1, int handPos, int curren
 	//each other player gains a copy of selected card
 	for (int i = 0; i < state->numPlayers; i++)
 	{
-		if (i != currentPlayer)
+		if (i == currentPlayer) //BUG HERE
 		{
 			gainCard(choice1, state, 1, i);
 		}
@@ -1301,11 +1301,11 @@ int playTribute(struct gameState *state, int handPos, int currentPlayer, int nex
 		}
 
 		else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens || tributeRevealedCards[i] == great_hall) {//Victory Card Found
-			drawCard(currentPlayer, state);
-			drawCard(currentPlayer, state);
+			drawCard(nextPlayer, state); // Bug here
+			drawCard(nextPlayer, state); // Same bug here
 		}
 		else {//Action Card
-			state->numActions = state->numActions + 2;
+			state->numActions += state->numActions + 2; // Bug here
 		}
 	}
 
@@ -1329,12 +1329,12 @@ int playMine(struct gameState *state, int handPos, int currentPlayer, int choice
 	}
 
 	// Validate that the cost of the replacement is not greater than the cost of the selected card plus 3
-	if ((k + 3) < getCost(choice2)) {
+	if ((k + 3) <= getCost(choice2)) {  //BUG HERE
 		return -1;
 	}
 
 	//gain replacement card and store it in the hand of the current player
-	gainCard(choice2, state, 2, currentPlayer); 
+	gainCard(choice2, state, 1, currentPlayer); //BUG HERE
 
 	//trash choice1 card from hand
 	discardCard(choice1, currentPlayer, state, 1);
