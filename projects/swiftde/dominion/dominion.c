@@ -1121,16 +1121,10 @@ int baronCard(struct gameState *state, int choice1, int currentPlayer)
         }
         if (supplyCount(estate, state) > 0)
         {
-          gainCard(estate, state, 0, currentPlayer);
-          state->supplyCount[estate]--; //Decrement estates
-          if (supplyCount(estate, state) == 0)
-          {
-            isGameOver(state);
-          }
+          gainEstate(state, currentPlayer);
         }
         card_not_discarded = 0; //Exit the loop
       }
-
       else
       {
         p++; //Next card
@@ -1142,16 +1136,22 @@ int baronCard(struct gameState *state, int choice1, int currentPlayer)
   {
     if (supplyCount(estate, state) > 0)
     {
-      gainCard(estate, state, 0, currentPlayer); //Gain an estate
-      state->supplyCount[estate]--;              //Decrement Estates
-      if (supplyCount(estate, state) == 0)
-      {
-        isGameOver(state);
-      }
+      gainEstate(state, currentPlayer);
     }
   }
 
   return 0;
+}
+
+// gainEstate helper function for Baron Card
+void gainEstate(struct gameState *state, int currentPlayer)
+{
+  gainCard(estate, state, 0, currentPlayer);
+  state->supplyCount[estate]--; //Decrement estates
+  if (supplyCount(estate, state) == 0)
+  {
+    isGameOver(state);
+  }
 }
 
 int minionCard(int handPos, int currentPlayer, int choice1, int choice2, struct gameState *state)
