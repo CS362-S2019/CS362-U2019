@@ -1141,7 +1141,7 @@ int playBaron(int choice1, struct gameState *state, int currentPlayer) {
 }
 
 
-int playMinion(int choice1, struct gameState state, int handPos, int currentPlayer) {
+int playMinion(int choice1, struct gameState *state, int handPos, int currentPlayer) {
 	//increase actions
 	state->numActions++;
 
@@ -1194,7 +1194,7 @@ int playMinion(int choice1, struct gameState state, int handPos, int currentPlay
 	return 0;
 }
 
-int playAmbassador(struct gameState state, int choice1, int handPos, int currentPlayer) {
+int playAmbassador(struct gameState *state, int choice1, int handPos, int currentPlayer) {
 	j = 0;		//used to keep track of how many selected cards are in player's hand
 	k = 0;      //used to keep track of the number of selected cards moved to supply from player's hand
 	l = 0;       // used to keep track of the first found card in players hand that matches the revealed card, for discard instead of supply
