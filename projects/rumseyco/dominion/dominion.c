@@ -768,7 +768,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return -1;
 			
     case mine:
-	  playMine(state, handPos, currentPlayer, choice1, choice2);
+	  playMine(state, handPos, currentPlayer, choice1);
 
     case remodel:
       j = state->hand[currentPlayer][choice1];  //store card we will trash
@@ -1313,7 +1313,7 @@ int playTribute(struct gameState *state, int handPos, int currentPlayer, int nex
 }
 
 
-int playMine(struct gameState *state, int handPos, int currentPlayer, int choice1, int choice2) {
+int playMine(struct gameState *state, int handPos, int currentPlayer, int choice1) {
 	/*
 	int j = state->hand[currentPlayer][choice1];  //store card we will trash
 	int k = getCost(state->hand[currentPlayer][choice1]);  //store the cost of the card we will trash
