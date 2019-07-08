@@ -1314,7 +1314,7 @@ int playTribute(struct gameState *state, int handPos, int currentPlayer, int nex
 
 
 int playMine(struct gameState *state, int handPos, int currentPlayer, int choice1, int choice2) {
-	
+	/*
 	int j = state->hand[currentPlayer][choice1];  //store card we will trash
 	int k = getCost(state->hand[currentPlayer][choice1]);  //store the cost of the card we will trash
 
@@ -1341,7 +1341,7 @@ int playMine(struct gameState *state, int handPos, int currentPlayer, int choice
 
 	//discard mine card from hand
 	discardCard(handPos, currentPlayer, state, 0);
-	
+	*/
 	return 0;
 }
 
