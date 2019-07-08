@@ -677,17 +677,15 @@ int baronEffect(int choice1, struct gameState *state){
                 }
                 card_not_discarded = 0;//Exit the loop
             }
-                  
-            else{
-                p++;//Next card
-            }
+            
+            p++;//Next card
+            
         }
     }
 			    
     else{
         if (supplyCount(estate, state) > 0){
             gainCard(estate, state, 0, currentPlayer);//Gain an estate
-            state->supplyCount[estate]--;//Decrement Estates
             if (supplyCount(estate, state) == 0){
                 isGameOver(state);
             }
@@ -729,12 +727,12 @@ int minionEffect(int choice1, int choice2, struct gameState *state, int handPos)
                 if ( state->handCount[i] > 4 ){
                     //discard hand
                     while( state->handCount[i] > 0 ){
-                        discardCard(handPos, i, state, 0);
+                        discardCard(handPos, currentPlayer, state, 0);
                     }
                         
                     //draw 4
                     for (int j = 0; j < 4; j++){
-                        drawCard(i, state);
+                        drawCard(j, state);
                     }
                 }
             }
@@ -782,6 +780,7 @@ int ambassadorEffect(int choice1, int choice2, struct gameState *state, int hand
 	    if (i != currentPlayer){
 	        gainCard(state->hand[currentPlayer][choice1], state, 0, i);
 	    }
+      state->supplyCount[state->hand[currentPlayer][choice1]]--;
 	}
 
   //discard played card from hand
@@ -792,7 +791,6 @@ int ambassadorEffect(int choice1, int choice2, struct gameState *state, int hand
 	    for (int i = 0; i < state->handCount[currentPlayer]; i++){
 	        if (state->hand[currentPlayer][i] == state->hand[currentPlayer][choice1]){
               discardCard(i, currentPlayer, state, 1);
-              break;
 		      }
 	    }
 	}			
@@ -846,7 +844,6 @@ int tributeEffect(int currentPlayer, int nextPlayer, struct gameState *state){
       //If we have a duplicate card, just drop one 
       state->playedCards[state->playedCardCount] = tributeRevealedCards[1];
       state->playedCardCount++;
-      tributeRevealedCards[1] = -1;
   }
 
   for (int i = 0; i <= 2; i++){
@@ -855,7 +852,7 @@ int tributeEffect(int currentPlayer, int nextPlayer, struct gameState *state){
           state->coins += 2;
       }
             
-      else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens || tributeRevealedCards[i] == great_hall){
+      else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] == province){
           //Victory Card Found
           drawCard(currentPlayer, state);
           drawCard(currentPlayer, state);
@@ -882,7 +879,7 @@ int mineEffect(int choice1, int choice2, int currentPlayer, struct gameState *st
 	    return -1;
 	}
 
-  if ( (getCost(state->hand[currentPlayer][choice1]) + 3) > getCost(choice2) ){
+  if ( (getCost(state->hand[currentPlayer][choice1]) + 3) < getCost(choice2) ){
 	    return -1;
 	}
 
@@ -894,8 +891,7 @@ int mineEffect(int choice1, int choice2, int currentPlayer, struct gameState *st
   //discard trashed card
   for (int i = 0; i < state->handCount[currentPlayer]; i++){
       if (state->hand[currentPlayer][i] == j){
-            discardCard(i, currentPlayer, state, 0);			
-            break;
+            discardCard(i, currentPlayer, state, 0);
       }
 	}
 
