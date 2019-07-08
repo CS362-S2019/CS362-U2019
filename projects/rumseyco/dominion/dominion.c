@@ -767,8 +767,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     case gardens:
       return -1;
 			
-   // case mine:
-//		playMine(state, handPos, currentPlayer, choice1, choice2);
+    case mine:
+	  playMine(state, handPos, currentPlayer, choice1, choice2);
 
     case remodel:
       j = state->hand[currentPlayer][choice1];  //store card we will trash
@@ -1312,7 +1312,7 @@ int playTribute(struct gameState *state, int handPos, int currentPlayer, int nex
 	return 0;
 }
 
-/*
+
 int playMine(struct gameState *state, int handPos, int currentPlayer, int choice1, int choice2) {
 	
 	int j = state->hand[currentPlayer][choice1];  //store card we will trash
@@ -1344,6 +1344,6 @@ int playMine(struct gameState *state, int handPos, int currentPlayer, int choice
 	
 	return 0;
 }
-*/
+
 
 //end of dominion.c
