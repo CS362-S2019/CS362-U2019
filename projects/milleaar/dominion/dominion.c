@@ -727,12 +727,12 @@ int minionEffect(int choice1, int choice2, struct gameState *state, int handPos)
                 if ( state->handCount[i] > 4 ){
                     //discard hand
                     while( state->handCount[i] > 0 ){
-                        discardCard(handPos, currentPlayer, state, 0);
+                        discardCard(handPos, i, state, 0);
                     }
                         
                     //draw 4
                     for (int j = 0; j < 4; j++){
-                        drawCard(j, state);
+                        drawCard(i, state);
                     }
                 }
             }
