@@ -1,1 +1,3 @@
-Here, You should create a directory with your ONID similar to instructor's ONID.
+Haya Ahmed, ahmedhay
+Assignment 2 code under projects/ahmedhay/dominion
+
