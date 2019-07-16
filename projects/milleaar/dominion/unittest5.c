@@ -86,6 +86,33 @@ int main() {
 			beforeState = G;
 			int result = mineEffect(choice1, choice2, currentPlayer, &G, 0);
 
+
+			//check treasure card amounts
+			int beforeCopper, beforeSilver, beforeGold = 0;
+			int afterCopper, afterSilver, afterGold = 0;
+			for (int p = 0; p < beforeState.handCount[currentPlayer]; p++) {
+				if (beforeState.hand[currentPlayer][i] == copper) {
+					beforeCopper++;
+				}
+				else if (beforeState.hand[currentPlayer][i] == silver) {
+					beforeSilver++;
+				}
+				else if (beforeState.hand[currentPlayer][i] == gold) {
+					beforeGold++;
+				}
+			}
+			for (int p = 0; p < G.handCount[currentPlayer]; p++) {
+				if (G.hand[currentPlayer][i] == copper) {
+					afterCopper++;
+				}
+				else if (G.hand[currentPlayer][i] == silver) {
+					afterSilver++;
+				}
+				else if (G.hand[currentPlayer][i] == gold) {
+					afterGold++;
+				}
+			}
+
 			//giving bad choices
 			if (i == 0 || j == 0) {
 
@@ -112,6 +139,7 @@ int main() {
 					printf("\tFAILED. Was valid combination of treasures\n");
 #endif              
 				}
+
 			}
 			//if choice1 is copper and choice2 is gold
 			else if (i == 1 && j == 3) {
@@ -142,7 +170,7 @@ int main() {
 				}
 			}
 
-			//check treasure card amounts
+			
 
 		}
 			
