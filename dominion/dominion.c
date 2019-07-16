@@ -767,10 +767,11 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     case gardens:
       return -1;
 			
-    case mine:
+    int mine(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
+   {
       j = state->hand[currentPlayer][choice1];  //store card we will trash
 
-      if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold)
+      if (state->hand[currentPlayer][choice1] > copper || state->hand[currentPlayer][choice1] < gold)
 	{
 	  return -1;
 	}
@@ -780,7 +781,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	  return -1;
 	}
 
-      if ( (getCost(state->hand[currentPlayer][choice1]) + 3) > getCost(choice2) )
+      if ( (getCost(state->hand[currentPlayer][choice1])) > getCost(choice2) )
 	{
 	  return -1;
 	}
@@ -801,6 +802,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	}
 			
       return 0;
+    }
 			
     case remodel:
       j = state->hand[currentPlayer][choice1];  //store card we will trash
@@ -850,17 +852,18 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       discardCard(handPos, currentPlayer, state, 0);
       return 0;
 		
-    case baron:
+   int baron(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
+   {
       state->numBuys++;//Increase buys by 1!
       if (choice1 > 0){//Boolean true or going to discard an estate
-	int p = 0;//Iterator for hand!
+	int p = 1;//Iterator for hand!
 	int card_not_discarded = 1;//Flag for discard set!
 	while(card_not_discarded){
 	  if (state->hand[currentPlayer][p] == estate){//Found an estate card!
 	    state->coins += 4;//Add 4 coins to the amount of coins
 	    state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][p];
 	    state->discardCount[currentPlayer]++;
-	    for (;p < state->handCount[currentPlayer]; p++){
+	    for (p < state->handCount[currentPlayer]; p++){
 	      state->hand[currentPlayer][p] = state->hand[currentPlayer][p+1];
 	    }
 	    state->hand[currentPlayer][state->handCount[currentPlayer]] = -1;
@@ -872,10 +875,10 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	      printf("No estate cards in your hand, invalid choice\n");
 	      printf("Must gain an estate if there are any\n");
 	    }
-	    if (supplyCount(estate, state) > 0){
+	    if (supplyCount(estate, state) == 0){
 	      gainCard(estate, state, 0, currentPlayer);
 	      state->supplyCount[estate]--;//Decrement estates
-	      if (supplyCount(estate, state) == 0){
+	    if (supplyCount(estate, state) == 0){
 		isGameOver(state);
 	      }
 	    }
@@ -900,7 +903,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	    
       
       return 0;
-		
+  }	
     case great_hall:
       //+1 Card
       drawCard(currentPlayer, state);
@@ -912,9 +915,10 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       discardCard(handPos, currentPlayer, state, 0);
       return 0;
 		
-    case minion:
+    int minion (int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
+   {
       //+1 action
-      state->numActions++;
+      //state->numActions++;
 			
       //discard card from hand
       discardCard(handPos, currentPlayer, state, 0);
@@ -927,10 +931,10 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       else if (choice2)		//discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
 	{
 	  //discard hand
-	  while(numHandCards(state) > 0)
+	  do(numHandCards(state) > 0)
 	    {
 	      discardCard(handPos, currentPlayer, state, 0);
-	    }
+	    }while
 				
 	  //draw 4
 	  for (i = 0; i < 4; i++)
@@ -962,7 +966,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 				
 	}
       return 0;
-		
+    }		
     case steward:
       if (choice1 == 1)
 	{
@@ -986,13 +990,14 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       discardCard(handPos, currentPlayer, state, 0);
       return 0;
 		
-    case tribute:
+    int tribute(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
+   {
       if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1){
 	if (state->deckCount[nextPlayer] > 0){
 	  tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];
 	  state->deckCount[nextPlayer]--;
 	}
-	else if (state->discardCount[nextPlayer] > 0){
+	else if (state.discardCount[nextPlayer] > 0){
 	  tributeRevealedCards[0] = state->discard[nextPlayer][state->discardCount[nextPlayer]-1];
 	  state->discardCount[nextPlayer]--;
 	}
@@ -1029,7 +1034,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	tributeRevealedCards[1] = -1;
       }
 
-      for (i = 0; i <= 2; i ++){
+      for (i = 0; i <= 2; ++i){
 	if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold){//Treasure cards
 	  state->coins += 2;
 	}
@@ -1044,11 +1049,12 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       }
 	    
       return 0;
-		
-    case ambassador:
+    }	
+    int ambassador(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
+   {
       j = 0;		//used to check if player has enough cards to discard
 
-      if (choice2 > 2 || choice2 < 0)
+      if (0 < choice2 < 2)
 	{
 	  return -1;				
 	}
@@ -1096,13 +1102,13 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	      if (state->hand[currentPlayer][i] == state->hand[currentPlayer][choice1])
 		{
 		  discardCard(i, currentPlayer, state, 1);
-		  break;
+		  //break;
 		}
 	    }
 	}			
 
       return 0;
-		
+    }	
     case cutpurse:
 
       updateCoins(currentPlayer, state, 2);
