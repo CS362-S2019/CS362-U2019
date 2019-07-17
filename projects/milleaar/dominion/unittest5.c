@@ -22,7 +22,6 @@ int main()
     int seed = 1000;
     int numPlayer = 2;
     int choice1, choice2, r;
-    int handCount = 5;
     int k[10] = {adventurer, council_room, feast, gardens, mine
                  ,
                  remodel, smithy, village, baron, great_hall};
@@ -72,7 +71,7 @@ int main()
             }
 
 #if (NOISY_TEST == 1)
-            printf("Testing with choice1 = %d, choice2 = %d", choice1, choice2);
+            printf("Testing with choice1 = %d, choice2 = %d\n", choice1, choice2);
 #endif
 
             //make new game
@@ -85,28 +84,28 @@ int main()
 
             //printing hand contents
             // for(int handPos = 0; handPos < G.handCount[currentPlayer]; handPos++){
-            // printf("Card %d : %d\n", handPos, G.hand[currentPlayer][handPos]);
-            // }
+            //  printf("Card %d : %d\n", handPos, G.hand[currentPlayer][handPos]);
+            //  }
 
             beforeState = G;
 
             int result = mineEffect(choice1, choice2, currentPlayer, &G, 0);
 
             //check treasure card amounts
-            int beforeCopper, beforeSilver, beforeGold = 0;
-            int afterCopper, afterSilver, afterGold = 0;
+            int beforeCopper = 0, beforeSilver = 0, beforeGold = 0;
+            int afterCopper = 0, afterSilver = 0, afterGold = 0;
 
             for (int p = 0; p < beforeState.handCount[currentPlayer]; p++)
             {
-                if (beforeState.hand[currentPlayer][i] == copper)
+                if (beforeState.hand[currentPlayer][p] == copper)
                 {
                     beforeCopper++;
                 }
-                else if (beforeState.hand[currentPlayer][i] == silver)
+                else if (beforeState.hand[currentPlayer][p] == silver)
                 {
                     beforeSilver++;
                 }
-                else if (beforeState.hand[currentPlayer][i] == gold)
+                else if (beforeState.hand[currentPlayer][p] == gold)
                 {
                     beforeGold++;
                 }
@@ -114,15 +113,15 @@ int main()
 
             for (int p = 0; p < G.handCount[currentPlayer]; p++)
             {
-                if (G.hand[currentPlayer][i] == copper)
+                if (G.hand[currentPlayer][p] == copper)
                 {
                     afterCopper++;
                 }
-                else if (G.hand[currentPlayer][i] == silver)
+                else if (G.hand[currentPlayer][p] == silver)
                 {
                     afterSilver++;
                 }
-                else if (G.hand[currentPlayer][i] == gold)
+                else if (G.hand[currentPlayer][p] == gold)
                 {
                     afterGold++;
                 }
@@ -156,6 +155,38 @@ int main()
                     printf("\tFAILED. Was valid combination of treasures\n");
 #endif
                 }
+                else if (j == 1) 
+                {
+                    if (beforeCopper == afterCopper) {
+                        testsPassed++;
+                        totalTests++;
+#if (NOISY_TEST == 1)
+                        printf("\tPASS. Traded Copper for Copper\n");
+#endif
+                    }
+                    else {
+                        totalTests++;
+#if (NOISY_TEST == 1)
+                        printf("\tFAILED. Did not trade cards correctly\n");
+#endif
+                    }
+                }
+                else if (j == 2) {
+                    if (beforeCopper - 1 == afterCopper && beforeSilver == afterSilver - 1) {
+                        testsPassed++;
+                        totalTests++;
+#if (NOISY_TEST == 1)
+                        printf("\tPASS. Traded Copper for Silver\n");
+#endif
+                    }
+                    else {
+                        totalTests++;
+#if (NOISY_TEST == 1)
+                        printf("\tFAILED. Did not trade cards correctly\n");
+#endif
+                    }
+                }
+
             }
             //if choice1 is copper and choice2 is gold
             else if (i == 1 && j == 3)
@@ -179,6 +210,37 @@ int main()
                     printf("\tFAILED. Was valid combination of treasures\n");
 #endif
                 }
+                else if (j == 1) 
+                {
+                    if (beforeCopper == afterCopper) {
+                        testsPassed++;
+                        totalTests++;
+#if (NOISY_TEST == 1)
+                        printf("\tPASS. Traded Gold for Copper\n");
+#endif
+                    }
+                    else {
+                        totalTests++;
+#if (NOISY_TEST == 1)
+                        printf("\tFAILED. Did not trade cards correctly\n");
+#endif
+                    }
+                }
+                else if (j == 2) {
+                    if (beforeCopper - 1 == afterCopper && beforeSilver == afterSilver - 1) {
+                        testsPassed++;
+                        totalTests++;
+#if (NOISY_TEST == 1)
+                        printf("\tPASS. Traded Gold for Silver\n");
+#endif
+                    }
+                    else {
+                        totalTests++;
+#if (NOISY_TEST == 1)
+                        printf("\tFAILED. Did not trade cards correctly\n");
+#endif
+                    }
+                }
             }
 
             //if choice1 is gold and choice2 is gold
@@ -191,7 +253,28 @@ int main()
                     printf("\tFAILED. Was valid combination of treasures\n");
 #endif
                 }
+                else if (beforeGold == afterGold) {
+                        testsPassed++;
+                        totalTests++;
+#if (NOISY_TEST == 1)
+                        printf("\tPASS. Traded Gold for Gold\n");
+#endif
+                }
+                else {
+                    totalTests++;
+#if (NOISY_TEST == 1)
+                    printf("\tFAILED. Did not trade cards correctly\n");
+#endif
+                }
+
+
             }
+
+#if (NOISY_TEST == 1)
+            printf("\tBefore Copper: %d\tAfter Copper: %d\n", beforeCopper, afterCopper);
+            printf("\tBefore Silver: %d\tAfter Silver: %d\n", beforeSilver, afterSilver);
+            printf("\tBefore Gold: %d\t\tAfter Gold: %d\n", beforeGold, afterGold);
+#endif
         }
     }
 
