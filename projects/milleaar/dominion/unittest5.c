@@ -83,14 +83,16 @@ int main()
             G.hand[currentPlayer][1] = choice1;
 
             //printing hand contents
-            // for(int handPos = 0; handPos < G.handCount[currentPlayer]; handPos++){
-            //  printf("Card %d : %d\n", handPos, G.hand[currentPlayer][handPos]);
-            //  }
+            for(int handPos = 0; handPos < G.handCount[currentPlayer]; handPos++){
+             printf("Card %d : %d\n", handPos, G.hand[currentPlayer][handPos]);
+             }
 
             beforeState = G;
 
-            int result = mineEffect(choice1, choice2, currentPlayer, &G, 0);
-
+            int result = mineEffect( 1, choice2, currentPlayer, &G, 0);
+for(int handPos = 0; handPos < G.handCount[currentPlayer]; handPos++){
+             printf("Card %d : %d\n", handPos, G.hand[currentPlayer][handPos]);
+             }
             //check treasure card amounts
             int beforeCopper = 0, beforeSilver = 0, beforeGold = 0;
             int afterCopper = 0, afterSilver = 0, afterGold = 0;
@@ -212,7 +214,7 @@ int main()
                 }
                 else if (j == 1) 
                 {
-                    if (beforeCopper == afterCopper) {
+                    if (beforeCopper + 1 == afterCopper && beforeGold == afterGold + 1) {
                         testsPassed++;
                         totalTests++;
 #if (NOISY_TEST == 1)
@@ -227,7 +229,7 @@ int main()
                     }
                 }
                 else if (j == 2) {
-                    if (beforeCopper - 1 == afterCopper && beforeSilver == afterSilver - 1) {
+                    if (beforeGold - 1 == afterGold && beforeSilver == afterSilver - 1) {
                         testsPassed++;
                         totalTests++;
 #if (NOISY_TEST == 1)
