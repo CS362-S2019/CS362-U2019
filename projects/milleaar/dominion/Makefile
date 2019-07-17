@@ -27,6 +27,24 @@ testBaron: unittest1.c dominion.o rngs.o
 testMinion: unittest2.c dominion.o rngs.o
 	gcc -o testMinion -g  unittest2.c dominion.o rngs.o $(CFLAGS)
 
+testAmbassador: unittest3.c dominion.o rngs.o
+	gcc -o testAmbassador -g  unittest3.c dominion.o rngs.o $(CFLAGS)
+
+testTribute: unittest4.c dominion.o rngs.o
+	gcc -o testTribute -g  unittest4.c dominion.o rngs.o $(CFLAGS)
+
+testMine: unittest5.c dominion.o rngs.o
+	gcc -o testTribute -g  unittest5.c dominion.o rngs.o $(CFLAGS)
+
+unittestresults: testBaron testMinion testAmbassador testTribute testMine
+	./testBaron &> unittestresult.out
+	./testMinion &> unittestresult.out
+	./testAmbassador &> unittestresult.out
+	./testTribute &> unittestresult.out
+	./testMine &> unittestresult.out
+	gcov dominion.c >> unittestresult.out
+	cat dominion.c.gcov >> unittestresult.out
+
 interface.o: interface.h interface.c
 	gcc -c interface.c -g  $(CFLAGS)
 

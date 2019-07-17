@@ -763,7 +763,7 @@ int ambassadorEffect(int choice1, int choice2, struct gameState *state, int hand
 	        j++;
 	    }
 	}
-  
+
   if (j < choice2){
 	    return -1;				
 	}
@@ -791,6 +791,7 @@ int ambassadorEffect(int choice1, int choice2, struct gameState *state, int hand
 	    for (int i = 0; i < state->handCount[currentPlayer]; i++){
 	        if (state->hand[currentPlayer][i] == state->hand[currentPlayer][choice1]){
               discardCard(i, currentPlayer, state, 1);
+              break;
 		      }
 	    }
 	}			
@@ -838,6 +839,7 @@ int tributeEffect(int currentPlayer, int nextPlayer, struct gameState *state){
       tributeRevealedCards[1] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];
       state->deck[nextPlayer][state->deckCount[nextPlayer]--] = -1;
       state->deckCount[nextPlayer]--;
+
   }    
 		       
   if (tributeRevealedCards[0] == tributeRevealedCards[1]){
@@ -847,6 +849,7 @@ int tributeEffect(int currentPlayer, int nextPlayer, struct gameState *state){
   }
 
   for (int i = 0; i <= 2; i++){
+
       if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold){
           //Treasure cards
           state->coins += 2;

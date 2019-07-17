@@ -22,9 +22,10 @@ int main() {
 
     int seed = 1000;
     int numPlayer = 2;
-    int choice1, r;
+    int choice1, choice2, copies, r;
+    int handPos = 0;
     int handCount = 5;
-    int k[10] = {adventurer, council_room, feast, gardens, mine
+    int k[10] = {ambassador, council_room, feast, gardens, mine
                , remodel, smithy, village, baron, great_hall};
     struct gameState beforeState;
 
@@ -32,143 +33,125 @@ int main() {
     float totalTests = 0;
 
 #if (NOISY_TEST == 1)
-    printf ("TESTING baronEffect:\n");
+    printf ("TESTING ambassadorEffect:\n");
 #endif
 
-    //"i" will make the choice1 = 0 or 1
-    //testing both possibilities
-    for (int i = 0; i < 2; i++) {
-#if (NOISY_TEST == 1)
-        printf("Testing with choice1 = %d.\n", i);
-#endif
-        //testing estate in different places in hand
-        //final iteration of loop tests with no estate
-        for (int j = 0; j < (handCount + 1); j++) {
-#if (NOISY_TEST == 1)
-            if(j < handCount){
-                printf("Testing with estate in hand position = %d.\n", j);
-            }
-            else {
-                printf("Testing estate not placed in hand\n");
-            }
-#endif
+        //testing choice2 of amount of cards to discard
+        for (int j = 0; j < 4; j++) {
+            //testing amount of copies available of card chosen to discard
+            for (int p = 0; p < 3; p++) {
+    #if (NOISY_TEST == 1)
+                printf("Testing with choice1 = %d, choice2 = %d, copies = %d.\n", 1, j, p);
+    #endif
+                choice1 = 1;
+                choice2 = j;
+                copies = p;
 
-            choice1 = i;
+                //make new game
+                struct gameState G;
+                r = initializeGame(numPlayer, k, seed, &G);
+                int currentPlayer = whoseTurn(&G);
+                int nextPlayer = currentPlayer + 1;
 
-            //make new game
-            struct gameState G;
-            r = initializeGame(numPlayer, k, seed, &G);
-            int currentPlayer = whoseTurn(&G);
+                G.hand[currentPlayer][handPos] = ambassador;
+                G.hand[currentPlayer][2] = copper;
 
-            for(int p = 0; p < handCount; p++) {
-                if(p == j) {
-                    G.hand[currentPlayer][p] = estate;
+                for(int z = 1; z <= copies; z++) {
+                    G.hand[currentPlayer][z] = feast;
+                    G.supplyCount[feast]--;
+                }
+                for(int z = 4; z > copies; z--){
+                    G.hand[currentPlayer][z] = k[z + 4];
+                }
+
+                //printing hand contents
+                // for(int handPos = 0; handPos < G.handCount[currentPlayer]; handPos++){
+                //     printf("Card %d : %d\n", handPos, G.hand[currentPlayer][handPos]);	
+                // }
+
+                beforeState = G;
+                int result = ambassadorEffect(choice1, choice2, &G, handPos);
+
+                if (result == -1) {
+                    if(choice2 > 2 || choice2 < 0 || choice1 == handPos || copies <= choice2){
+                        testsPassed++;
+                        totalTests++;
+    #if (NOISY_TEST == 1)
+                        printf("\tPASS. Bad parameter combination caught\n");
+    #endif
+                    }
+                    else {
+                        totalTests++;
+    #if (NOISY_TEST == 1)
+                        printf("\tFAILED. Returned -1 but all parameters good\n");
+    #endif                     
+                    }
+                    
                 }
                 else{
-                    G.hand[currentPlayer][p] = baron;
-                }
-            }
-            //printing hand contents
-            // for(int handPos = 0; handPos < G.handCount[currentPlayer]; handPos++){
-            //     printf("Card %d : %d\n", handPos, G.hand[currentPlayer][handPos]);	
-            // }
-
-
-            beforeState = G;
-            int result = baronEffect(choice1, &G);
-
-            if(choice1) {
-                //chose to discard estate for treasure
-                if( j != handCount){
-                    if ( (G.coins - beforeState.coins) == 4 ){
+                    //making sure supply is affected as intended
+                    //if pass, then other players received copy of card
+                    if(G.supplyCount[choice1] == (beforeState.supplyCount[choice1] + choice2 - numPlayer)){
                         testsPassed++;
                         totalTests++;
-#if (NOISY_TEST == 1)
-                        printf("\tPASS. Coins increased\n");
-#endif
+    #if (NOISY_TEST == 1)
+                        printf("\tPASS. Supply decreased correctly\n");
+    #endif
                     }
                     else {
                         totalTests++;
-#if (NOISY_TEST == 1)
-                        printf("\tFAILED. Coins not increased\n");
-#endif                     
+    #if (NOISY_TEST == 1)
+                        printf("\tFAILED. Supply not decreased correctly\n");
+    #endif                     
                     }
 
-                    if(beforeState.discardCount[currentPlayer] + 1 == G.discardCount[currentPlayer]) {
+                    //making sure played cards increased
+                    if(G.playedCardCount > beforeState.playedCardCount){
                         testsPassed++;
                         totalTests++;
-#if (NOISY_TEST == 1)
-                        printf("\tPASS. Estate discarded\n");
-#endif
-                    }
-                    else {
-                        totalTests++;
-#if (NOISY_TEST == 1)
-                        printf("\tFAILED. Estate not discarded\n");
-#endif     
-                    }
-                }
-                else if ( j == handCount) {
-                    //chose to discard estate but did not have an estate card
-                    if( G.hand[currentPlayer][G.handCount[currentPlayer]] == estate ) {
-                        testsPassed++;
-                        totalTests++;
-#if (NOISY_TEST == 1)
-                        printf("\tPASS. Picked up estate\n");
-#endif
+    #if (NOISY_TEST == 1)
+                        printf("\tPASS. Played cards increased\n");
+    #endif
                     }
                     else{
                         totalTests++;
-#if (NOISY_TEST == 1)
-                        printf("\tFAILED. Did not pickup estate\n");
-#endif
+    #if (NOISY_TEST == 1)
+                        printf("\tFAILED. Played cards not increased\n");
+    #endif              
                     }
-                }
-                //else test failed for choosing to discard estate
-                else {
-#if (NOISY_TEST == 1)
-                    printf("\tINTERNAL TEST FAILURE WITH ASSIGNING VARIABLES\n");
-#endif
-                }
-            }
-            else {
-                //chose to gain estate
-                if( (beforeState.supplyCount[estate] - 1) == G.supplyCount[estate]) {
-                    testsPassed++;
-                    totalTests++;
-#if (NOISY_TEST == 1)
-                    printf("\tPASS. Supply decremented\n");
-#endif
-                }
-                else{
-                    totalTests++;
-#if (NOISY_TEST == 1)
-                    printf("\tFAILED. Supply not decremented\n");
-#endif
-                }
 
-                if ( G.hand[currentPlayer][G.handCount[currentPlayer]] == estate) {
-                    testsPassed++;
-                    totalTests++;
-#if (NOISY_TEST == 1)
-                    printf("\tPASS. Picked up estate\n");
-#endif
-                }
-                else{
-                    totalTests++;
-#if (NOISY_TEST == 1)
-                    printf("\tFAILED. Did not pickup estate\n");
-#endif
-                }
+                    //making sure cards are removed from current player
+                    int beforeCopies = 0;
+                    for(int z = 0; z < beforeState.handCount[currentPlayer]; z++) {
+                        if(beforeState.hand[currentPlayer][choice1] == beforeState.hand[currentPlayer][z]){
+                            beforeCopies++;
+                        }
+                    }
+                    int afterCopies = 0;
+                    for(int z = 0; z < G.handCount[currentPlayer]; z++) {
+                        if(beforeState.hand[currentPlayer][choice1] == G.hand[currentPlayer][z]){
+                            afterCopies++;
+                        }
+                    }
+                    if(beforeCopies - afterCopies == choice2) {
+                        testsPassed++;
+                        totalTests++;
+    #if (NOISY_TEST == 1)
+                        printf("\tPASS. Cards were discarded\n");
+    #endif
+                    }
+                    else{
+                        totalTests++;
+    #if (NOISY_TEST == 1)
+                        printf("\tFAILED. Wrong amount of cards discarded\n");
+    #endif              
+                    }
 
-
+                }
 
             }
-
 
         }
-
-    }
 
     float percentPass = (testsPassed / totalTests) * 100.0;
 
