@@ -1,10 +1,10 @@
 /* -----------------------------------------------------------------------
 * Aaron Miller
 *
-* Testing mineEffect function
+* Testing initializeGame function
 *
-* testMine: unittest5.c dominion.o rngs.o
-* gcc -o testMine -g unittest5.c dominion.o rngs.o $(CFLAGS)
+* testInitGame: cardtest1.c dominion.o rngs.o
+* gcc -o testInitGame -g cardtest1.c dominion.o rngs.o $(CFLAGS)
 * -----------------------------------------------------------------------
 */
 #include "dominion.h"
@@ -83,14 +83,16 @@ int main()
             G.hand[currentPlayer][1] = choice1;
 
             //printing hand contents
-            // for(int handPos = 0; handPos < G.handCount[currentPlayer]; handPos++){
-            //  printf("Card %d : %d\n", handPos, G.hand[currentPlayer][handPos]);
-            //  }
+            for(int handPos = 0; handPos < G.handCount[currentPlayer]; handPos++){
+             printf("Card %d : %d\n", handPos, G.hand[currentPlayer][handPos]);
+             }
 
             beforeState = G;
 
             int result = mineEffect( 1, choice2, currentPlayer, &G, 0);
-
+for(int handPos = 0; handPos < G.handCount[currentPlayer]; handPos++){
+             printf("Card %d : %d\n", handPos, G.hand[currentPlayer][handPos]);
+             }
             //check treasure card amounts
             int beforeCopper = 0, beforeSilver = 0, beforeGold = 0;
             int afterCopper = 0, afterSilver = 0, afterGold = 0;
