@@ -1097,7 +1097,8 @@ int updateCoins(int player, struct gameState *state, int bonus)
 
 int baron(int card, int choice1, struct gameState *state, int handPos, int *bonus)
 {
-    
+    int currentPlayer = whoseTurn(state);
+    int nextPlayer = currentPlayer + 1;
     // Increment number of buys
     state->numBuys++;
     
