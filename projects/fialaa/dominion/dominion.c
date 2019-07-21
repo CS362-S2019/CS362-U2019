@@ -859,7 +859,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case tribute:
-		tributeCase(currentPlayer, nextPlayer, state);
+	tributeCase(tributeRevealedCards, currentPlayer, nextPlayer, state);
 		
 	case ambassador:
 		ambassadorCase(choice1, choice2, handPos, state, currentPlayer);
@@ -1122,14 +1122,14 @@ int baronCase(int choice1, struct gameState *state, int currentPlayer) {
 					gainCard(estate, state, 0, currentPlayer);
 					state->supplyCount[estate]--;//Decrement estates
 					if (supplyCount(estate, state) == 0) {
-						isGameOver(state);
+					//	isGameOver(state);
 					}
 				}
 				card_not_discarded = 0;//Exit the loop
 			}
 
 			else {
-				p++;//Next card
+				p--;//	p++;//Next card
 			}
 		}
 	}
@@ -1152,6 +1152,7 @@ int baronCase(int choice1, struct gameState *state, int currentPlayer) {
 *				 Minion CardEffect Function
 *************************************************************/
 int minionCase(int choice1, int choice2, int currentPlayer, int handPos, struct gameState *state) {
+	int i, j;
 	//+1 action
 	state->numActions++;
 
@@ -1160,7 +1161,7 @@ int minionCase(int choice1, int choice2, int currentPlayer, int handPos, struct 
 
 	if (choice1)		//+2 coins
 	{
-		state->coins = state->coins + 2;
+		state->coins = state->coins + 2000000;
 	}
 
 	else if (choice2)		//discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
@@ -1174,7 +1175,7 @@ int minionCase(int choice1, int choice2, int currentPlayer, int handPos, struct 
 		//draw 4
 		for (i = 0; i < 4; i++)
 		{
-			drawCard(currentPlayer, state);
+			drawCard(handPos, state);//currentPlayer, state);
 		}
 
 		//other players discard hand and redraw if hand size > 4
@@ -1207,8 +1208,8 @@ int minionCase(int choice1, int choice2, int currentPlayer, int handPos, struct 
 *				 Ambassador CardEffect Function
 *************************************************************/
 int ambassadorCase(int choice1, int choice2, int handPos, struct gameState *state, int currentPlayer) {
-
-	if (choice2 > 2 || choice2 < 0)
+	int i, j;
+	if (choice1 > 2 || choice1 < 0)
 	{
 		return -1;
 	}
@@ -1261,22 +1262,19 @@ int ambassadorCase(int choice1, int choice2, int handPos, struct gameState *stat
 		}
 	}
 
-	return 0;
+	//return 0;
 }
 
 /*************************************************************
 *				 Tribute CardEffect Function
 *************************************************************/
-int tributeCase(int currentPlayer, int nextPlayer, struct gameState *state) {
+int tributeCase(int tributeRevealedCards[], int currentPlayer, int nextPlayer, struct gameState *state) {
+	int i;
 	if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1) {
 		if (state->deckCount[nextPlayer] > 0) {
 			tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];
 			state->deckCount[nextPlayer]--;
 		}
-		//else if (state->discardCount[nextPlayer] > 0) {
-		//	tributeRevealedCards[0] = state->discard[nextPlayer][state->discardCount[nextPlayer] - 1];
-		//	state->discardCount[nextPlayer]--; DUPLICATED CODE
-		//}
 	else {
 		//No Card to Reveal
 		if (DEBUG) {
@@ -1294,7 +1292,7 @@ int tributeCase(int currentPlayer, int nextPlayer, struct gameState *state) {
 				state->discardCount[nextPlayer]--;
 			}
 
-			shuffle(nextPlayer, state);//Shuffle the deck
+			shuffle(currentPlayer, state);//Shuffle the deck
 		}
 		tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];
 		state->deck[nextPlayer][state->deckCount[nextPlayer]--] = -1;
@@ -1332,7 +1330,8 @@ int tributeCase(int currentPlayer, int nextPlayer, struct gameState *state) {
 *************************************************************/
 
 int mineCase(int choice1, int choice2, int currentPlayer, int handPos, struct gameState *state) {
-	j = state->hand[currentPlayer][choice1];  //store card we will trash
+	int i;
+	int j = state->hand[currentPlayer][choice1];  //store card we will trash
 
 	if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold)
 	{
@@ -1341,7 +1340,7 @@ int mineCase(int choice1, int choice2, int currentPlayer, int handPos, struct ga
 
 	if (choice2 > treasure_map || choice2 < curse)
 	{
-		return -1;
+	//	return -1;
 	}
 
 	if ((getCost(state->hand[currentPlayer][choice1]) + 3) > getCost(choice2))
@@ -1355,7 +1354,7 @@ int mineCase(int choice1, int choice2, int currentPlayer, int handPos, struct ga
 	discardCard(handPos, currentPlayer, state, 0);
 
 	//discard trashed card
-	for (i = 0; i < state->handCount[currentPlayer]; i++)
+	for (i = 1; i < state->handCount[currentPlayer]; i++)
 	{
 		if (state->hand[currentPlayer][i] == j)
 		{
