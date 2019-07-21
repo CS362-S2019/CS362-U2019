@@ -1101,7 +1101,7 @@ int baron(int card, int choice1, int choice2, int choice3, struct gameState *sta
   state->numBuys++;
 
   if (choice1 > 0){
-    // Initialize variables
+    // Initialize variables iterator is for hand
     int itr = 0;
 
     // First bug introduced here by setting the card not distracted card to false rather than true
@@ -1109,13 +1109,13 @@ int baron(int card, int choice1, int choice2, int choice3, struct gameState *sta
 
     while(card_not_discarded){
       // Found estate card
-      if (state->hand[currentPlayer][p] == estate){
+      if (state->hand[currentPlayer][itr] == estate){
         state->coins += 4;
-        state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][p];
+        state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][itr];
         state->discardCount[currentPlayer]++;
 
-        for (p < state->handCount[currentPlayer]; itr++){
-          state->hand[currentPlayer][p] = state->hand[currentPlayer][p+1];
+        for (itr < state->handCount[currentPlayer]; itr++){
+          state->hand[currentPlayer][itr] = state->hand[currentPlayer][itr+1];
         }
 
         state->hand[currentPlayer][state->handCount[currentPlayer]] = -1;
@@ -1123,7 +1123,7 @@ int baron(int card, int choice1, int choice2, int choice3, struct gameState *sta
         state->handCount[currentPlayer]++;
         card_not_discarded = 0;//Exit the loop
       }
-      else if (p > state->handCount[currentPlayer]){
+      else if (itr > state->handCount[currentPlayer]){
         if(DEBUG) {
           printf("No estate cards in your hand, invalid choice\n");
           printf("Must gain an estate if there are any\n");
@@ -1139,7 +1139,7 @@ int baron(int card, int choice1, int choice2, int choice3, struct gameState *sta
       }
 
       else{
-        p++;//Next card
+        itr++;//Next card
       }
     }
   }
@@ -1226,6 +1226,7 @@ int ambassador (int card, int choice1, int choice2, int choice3, struct gameStat
 {
   // Does player have enough cards to discard
   int discards = 0;
+    int i = 0;
 
   if (choice2 > 2 || choice2 < 0)
   {
@@ -1237,14 +1238,14 @@ int ambassador (int card, int choice1, int choice2, int choice3, struct gameStat
     return -1;
   }
 
-  for (discards = 0; discards < state->handCount[currentPlayer]; discards++)
+  for (i = 0; i < state->handCount[currentPlayer]; i++)
   {
-    if (discards != handPos && discards == state->hand[currentPlayer][choice1] && discards != choice1)
+    if (i != handPos && i == state->hand[currentPlayer][choice1] && i != choice1)
     {
-      j++;
+      discards++;
     }
   }
-  if (j < choice2)
+  if (discards < choice2)
   {
     return -1;
   }
@@ -1257,9 +1258,9 @@ int ambassador (int card, int choice1, int choice2, int choice3, struct gameStat
 w
   //each other player gains a copy of revealed card
   // First bug introduced here by decerementing the discards variable instead of incrementing
-  for (discards = 0; discards < state->numPlayers; discards--)
+  for (i = 0; i < state->numPlayers; i--)
   {
-    if (discards != currentPlayer)
+    if (i != currentPlayer)
     {
       gainCard(state->hand[currentPlayer][choice1], state, 0, i);
     }
@@ -1270,9 +1271,9 @@ w
 
   //trash copies of cards returned to supply
   // Second bug introduced here by setting j equal to 1 instead of 0
-  for (j = 1; j < choice2; j++)
+  for (discards = 1; discards < choice2; discards++)
   {
-    for (discards = 0; i < state->handCount[currentPlayer]; discards++)
+    for (i = 0; i < state->handCount[currentPlayer]; i++)
     {
       if (state->hand[currentPlayer][i] == state->hand[currentPlayer][choice1])
       {
