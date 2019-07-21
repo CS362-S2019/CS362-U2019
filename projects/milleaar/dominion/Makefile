@@ -9,8 +9,8 @@ dominion.o: dominion.h dominion.c rngs.o
 playdom: dominion.o playdom.c
 	gcc -o playdom playdom.c -g dominion.o rngs.o $(CFLAGS)
 #To run playdom you need to entere: ./playdom <any integer number> like ./playdom 10*/
-testDrawCard: testDrawCard.c dominion.o rngs.o
-	gcc  -o testDrawCard -g  testDrawCard.c dominion.o rngs.o $(CFLAGS)
+#testDrawCard: testDrawCard.c dominion.o rngs.o
+#	gcc  -o testDrawCard -g  testDrawCard.c dominion.o rngs.o $(CFLAGS)
 
 badTestDrawCard: badTestDrawCard.c dominion.o rngs.o
 	gcc -o badTestDrawCard -g  badTestDrawCard.c dominion.o rngs.o $(CFLAGS)
@@ -36,26 +36,33 @@ testTribute: unittest4.c dominion.o rngs.o
 testMine: unittest5.c dominion.o rngs.o
 	gcc -o testMine -g  unittest5.c dominion.o rngs.o $(CFLAGS)
 
+testInitGame: cardtest1.c dominion.o rngs.o
+	gcc -o testInitGame -g cardtest1.c dominion.o rngs.o $(CFLAGS)
+
 testShuffle: cardtest2.c dominion.o rngs.o
 	gcc -o testShuffle -g cardtest2.c dominion.o rngs.o $(CFLAGS)
 
 testEndTurn: cardtest3.c dominion.o rngs.o
 	gcc -o testEndTurn -g cardtest3.c dominion.o rngs.o $(CFLAGS)
 
-testDrawCard: cardtest5.c dominion.o rngs.o
-	gcc -o testDrawCard -g cardtest5.c dominion.o rngs.o $(CFLAGS)
-
 testGetWinners: cardtest4.c dominion.o rngs.o
 	gcc -o testGetWinners -g cardtest4.c dominion.o rngs.o $(CFLAGS)
 
-unittestresults: testBaron testMinion testAmbassador testTribute testMine
+testDrawCard: cardtest5.c dominion.o rngs.o
+	gcc -o testDrawCard -g cardtest5.c dominion.o rngs.o $(CFLAGS)
+
+unittestresults: dominion.o testBaron testMinion testAmbassador testTribute testMine testInitGame testShuffle testEndTurn testGetWinners testDrawCard
 	./testBaron &> unittestresult.out
-	./testMinion &> unittestresult.out
-	./testAmbassador &> unittestresult.out
-	./testTribute &> unittestresult.out
-	./testMine &> unittestresult.out
-	./testShuffle &> unittestresult.out
-	gcov dominion.c >> unittestresult.out
+	./testMinion >> unittestresult.out
+	./testAmbassador >> unittestresult.out
+	./testTribute >> unittestresult.out
+	./testMine >> unittestresult.out
+	./testInitGame >> unittestresult.out
+	./testShuffle >> unittestresult.out
+	./testEndTurn >> unittestresult.out
+	./testGetWinners >> unittestresult.out
+	./testDrawCard >> unittestresult.out
+	gcov dominion.c -b -f >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
 
 interface.o: interface.h interface.c
