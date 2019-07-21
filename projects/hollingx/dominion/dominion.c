@@ -1095,8 +1095,9 @@ int updateCoins(int player, struct gameState *state, int bonus)
 
 
 
-int baron(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
+int baron(int card, int choice1, struct gameState *state, int handPos, int *bonus)
 {
+    
     // Increment number of buys
     state->numBuys++;
     
@@ -1165,6 +1166,9 @@ int baron(int card, int choice1, int choice2, int choice3, struct gameState *sta
 
 int minion (int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
+ 
+    int currentPlayer = whoseTurn(state);
+    int nextPlayer = currentPlayer + 1;
     // Increment number of actions
     // First bug introduced here by decrementing the number of actions instead of incrementing it
     state->numActions--;
@@ -1224,6 +1228,12 @@ int minion (int card, int choice1, int choice2, int choice3, struct gameState *s
 
 int ambassador (int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
+  
+    int currentPlayer = whoseTurn(state);
+    int nextPlayer = currentPlayer + 1;
+    
+  
+    int z = 0;// this is the counter for the temp hand
     // Does player have enough cards to discard
     int discards = 0;
     int i = 0;
@@ -1293,6 +1303,10 @@ int ambassador (int card, int choice1, int choice2, int choice3, struct gameStat
 
 int tribute (int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
+   
+    int currentPlayer = whoseTurn(state);
+    int nextPlayer = currentPlayer + 1;
+
     if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1){
         if (state->deckCount[nextPlayer] > 0){
             tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];
@@ -1361,6 +1375,10 @@ int mine (int card, int choice1, int choice2, int choice3, struct gameState *sta
 {
     // Trash card variable
     int trash = state->hand[currentPlayer][choice1];
+    int currentPlayer = whoseTurn(state);
+    int nextPlayer = currentPlayer + 1;
+   
+    int z = 0;// this is the counter for the temp hand
     
     // First bug introduced here by returning 0 instead of -1
     if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold)
