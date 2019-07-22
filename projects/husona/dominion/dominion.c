@@ -1272,8 +1272,8 @@ int playTribute(struct gameState* state, int handPos)
 	
 	//discard card from hand
     discardCard(handPos, state->whoseTurn, state, 0);
-	
-	if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) < 1)	// **intentional bug**: < should be <=
+	// (intentional bug from next line correctedso random testing could be done without causing the program to crash)
+	if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1)	// **intentional bug**: < should be <=
 	{
 		if (state->deckCount[nextPlayer] > 0)
 		{
