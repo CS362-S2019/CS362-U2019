@@ -35,8 +35,8 @@ int main (){
 		int preEstateCount;
 		int preHandCount = game->handCount[currPlayer];
 		for (int i = 0; i <= preHandCount; i++){
-			if (game.hand[currPlayer][i] == estate){
-				preEstateCount++
+			if (game->hand[currPlayer][i] == estate){
+				preEstateCount++;
 			}
 		}
 
@@ -44,9 +44,9 @@ int main (){
 
 		int postEstateCount;
 
-		if (preEstateCount > 0 && choice1 == 1 && preHandCount - 2 == game->handCount[currPlayer] &&  preBuys + 1 == game->numBuys && preCoins + 4 = game->coins){
+		if (preEstateCount > 0 && choice1 == 1 && preHandCount - 2 == game->handCount[currPlayer] &&  preBuys + 1 == game->numBuys && preCoins + 4 == game->coins){
 			for (int i = 0; i <= game->handCount; i++){
-				if (game.hand[currPlayer][i] == estate){
+				if (game->hand[currPlayer][i] == estate){
 					postEstateCount++;
 				}
 			}
@@ -58,7 +58,7 @@ int main (){
 		}
 		else if (choice1 == 0 && preBuys + 1 == game->numBuys){
 			for (int i = 0; i <= game->handCount; i++){
-				if (game.hand[currPlayer][i] == estate){
+				if (game->make hand[currPlayer][i] == estate){
 					postEstateCount++;
 				}
 			}
