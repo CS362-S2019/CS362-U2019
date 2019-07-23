@@ -740,7 +740,7 @@ int minionRefactor(struct gameState *state, int handPos, int choice1, int choice
                     }
                     
                     //draw 4
-                    for (j = 0; j < 4; j++)
+                    for (int j = 0; j < 4; j++)
                     {
                         drawCard(i, state);
                     }
@@ -816,6 +816,8 @@ int ambassadorRefactor(struct gameState *state, int handPos, int choice1, int ch
 int tributeRefactor(struct gameState *state){
     int i;
     int currentPlayer = whoseTurn(state);
+    int nextPlayer = currentPlayer + 1;
+    int tributeRevealedCards[2] = {-1, -1};
     
     if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 0){
         if (state->deckCount[nextPlayer] > 0){
@@ -903,7 +905,7 @@ int mineRefactor(struct gameState *state, int handPos, int choice2, int choice1)
     discardCard(handPos, currentPlayer, state, 0);
     
     //discard trashed card
-    for (i = 0; i < state->handCount[currentPlayer]; i++)
+    for (i = 1; i < state->handCount[currentPlayer]; i++)
     {
         if (state->hand[currentPlayer][i] == j)
         {
@@ -1094,7 +1096,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case baron:
-        return baronRefactor(state, choice1, choice2);
+        return baronRefactor(state, choice1);
 
 		
     case great_hall:
