@@ -1099,37 +1099,25 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 int discardCard(int handPos, int currentPlayer, struct gameState *state, int trashFlag)
 {
 	
-  //if card is not trashed, added to Played pile 
-  if (trashFlag < 1)
+  //if card is not trashed, add to discard
+	if (trashFlag != 1)
     {
-      //add card to played pile
-      state->playedCards[state->playedCardCount] = state->hand[currentPlayer][handPos]; 
-      state->playedCardCount++;
+		//add card to players discard pile
+		state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][handPos]; 
+		state->discardCount[currentPlayer]++;
     }
+	else	// add to played cards
+	{
+		state->playedCards[state->playedCardCount] = state->hand[currentPlayer][handPos];
+		state->playedCardCount++;
+	}
 	
-  //set played card to -1
-  state->hand[currentPlayer][handPos] = -1;
-	
-  //remove card from player's hand
-  if ( handPos == (state->handCount[currentPlayer] - 1) ) 	//last card in hand array is played
-    {
-      //reduce number of cards in hand
-      state->handCount[currentPlayer]--;
-    }
-  else if ( state->handCount[currentPlayer] == 1 ) //only one card in hand
-    {
-      //reduce number of cards in hand
-      state->handCount[currentPlayer]--;
-    }
-  else 	
-    {
-      //replace discarded card with last card in hand
-      state->hand[currentPlayer][handPos] = state->hand[currentPlayer][ (state->handCount[currentPlayer] - 1)];
-      //set last card to -1
-      state->hand[currentPlayer][state->handCount[currentPlayer] - 1] = -1;
-      //reduce number of cards in hand
-      state->handCount[currentPlayer]--;
-    }
+    //replace discarded card with last card in hand
+    state->hand[currentPlayer][handPos] = state->hand[currentPlayer][(state->handCount[currentPlayer] - 1)];
+    //set last card to -1
+    state->hand[currentPlayer][state->handCount[currentPlayer] - 1] = -1;
+    //reduce number of cards in hand
+    state->handCount[currentPlayer]--;
 	
   return 0;
 }
@@ -1206,7 +1194,7 @@ int playBaron(struct gameState* state, int handPos, int discardEstate)
 	int card_not_discarded = 1;	//Flag for discard set!
 	state->numBuys = 1;			// Increase buys by 1 **intentional bug**: state->numBuys++;
 	discardCard(handPos, state->whoseTurn, state, 1); // discard the baron card **intentional bug**: discardCard(handPos, state->whoseTurn, state, 0);
-	
+
     if (discardEstate != 0)	//Boolean true or going to discard an estate
 	{	
 		int i = findCard(state, estate);
@@ -1226,7 +1214,7 @@ int playBaron(struct gameState* state, int handPos, int discardEstate)
 		}
 	}
 	
-	if (card_not_discarded)
+	if (card_not_discarded == 1)
 	{
 		gainCard(estate, state, 0, state->whoseTurn);
 	}		    	    
@@ -1272,13 +1260,14 @@ int playTribute(struct gameState* state, int handPos)
 	
 	//discard card from hand
     discardCard(handPos, state->whoseTurn, state, 0);
-	// (intentional bug from next line correctedso random testing could be done without causing the program to crash)
-	if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1)	// **intentional bug**: < should be <=
+	if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1)	// **intentional bug**: < should be <= (fixed for assignment 4 to prevent crashing and achieve coverage)
 	{
 		if (state->deckCount[nextPlayer] > 0)
 		{
 			tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];
-			discardCard(state->deckCount[nextPlayer]-1, nextPlayer, state, 0);
+			state->discard[nextPlayer][state->discardCount[nextPlayer]] = tributeRevealedCards[0]; // move card to discard pile
+			state->discardCount[nextPlayer]++; // increment discard count
+			state->deckCount[nextPlayer]--;	// decrement the deck count
 		}
 		else if (state->discardCount[nextPlayer] > 0)
 		{
@@ -1301,17 +1290,21 @@ int playTribute(struct gameState* state, int handPos)
 				state->deck[nextPlayer][i] = state->discard[nextPlayer][i];	//Move to deck
 				state->deckCount[nextPlayer]++;
 				state->discard[nextPlayer][i] = -1;
-				state->discardCount[nextPlayer]--;
 			}
+			state->discardCount[nextPlayer] = 0;
 					
 		  shuffle(nextPlayer,state);//Shuffle the deck
 		}
 		
-		tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];
-		discardCard(state->deckCount[nextPlayer]-1, nextPlayer, state, 0);
+		tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];	// add top card from deck to the tributeReveal
+		state->discard[nextPlayer][state->discardCount[nextPlayer]] = tributeRevealedCards[0]; // move card to discard pile
+		state->discardCount[nextPlayer]++; // increment discard count
+		state->deckCount[nextPlayer]--;	// decrement the deck count
 		
-		tributeRevealedCards[1] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];
-		discardCard(state->deckCount[nextPlayer]-1, nextPlayer, state, 0);
+		tributeRevealedCards[1] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];	// add top card from deck to the tributeReveal
+		state->discard[nextPlayer][state->discardCount[nextPlayer]] = tributeRevealedCards[1]; // move card to discard pile
+		state->discardCount[nextPlayer]++; // increment discard count
+		state->deckCount[nextPlayer]--;	// decrement the deck count
     }    
 		       
     if (tributeRevealedCards[0] == tributeRevealedCards[1]) //If we have a duplicate card, just drop one 
