@@ -644,7 +644,7 @@ int getCost(int cardNumber)
 }
 
 int baronRefactor(struct gameState *state, int choice1){
-    int currentPlayer = whoseTurn(state) + 1;
+    int currentPlayer = whoseTurn(state);
     
     state->numBuys++;//Increase buys by 1!
     if (choice1 > 0){//Boolean true or going to discard an estate
