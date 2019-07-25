@@ -6,13 +6,31 @@
 char inputChar()
 {
     // TODO: rewrite this function
-    return ' ';
+	int range = 126 - 32 + 1;
+	int num = 32 + (rand() % range);
+
+	int testchar = (char)num;
+    return testchar;
 }
 
 char *inputString()
 {
-    // TODO: rewrite this function
-    return "";
+    // TODO: rewrite this 
+	int len = 6;
+	char og[len];
+	int a = 0; 
+	int stringSize = len - 1;
+	int range = 116 - 101 + 1;
+	for (a = 0; a < 5; a++) {
+		int num = 101 + (rand() % range);
+		char letter = (char)num;
+		og[a] = letter;
+	}
+
+	og[stringSize] = '\0';
+	char *returnString = og;
+	return returnString;
+
 }
 
 void testme()
