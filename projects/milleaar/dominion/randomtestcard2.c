@@ -36,12 +36,12 @@ void randomizeGame(struct gameState *G, int *kingdomCards, int* handPos){
     int seed = floor(Random() * 1000);
     int numPlayers = floor(Random() * MAX_PLAYERS + 1);
     
-    initializeGame(numPlayers, kingdomCards, seed, &G);
+    initializeGame(numPlayers, kingdomCards, seed, G);
 
     G->numPlayers = numPlayers;
     G->supplyCount[estate] = floor(Random() * 13); //estates set to range from 0 - 12
     G->whoseTurn = floor(Random() * G->numPlayers);
-    int currentPlayer = whoseTurn(&G);
+    int currentPlayer = whoseTurn(G);
     G->numActions = floor(Random() * 100); //buys set to range from 0 to 99
     G->handCount[currentPlayer] = floor(Random() * MAX_HAND);
     for(int i = 0; i < G->handCount[currentPlayer]; i++) {
@@ -74,7 +74,7 @@ void testMinion(int choice1, int choice2, struct gameState *post, int handPos) {
     int currentPlayer = whoseTurn(post);
     int result = minionEffect(choice1, choice2, post, handPos);
 
-    int discard = 1, extraCoins = 0, hand;
+    int discard = 1, extraCoins = 0, hand = 0;
     if(choice1) 
     {
         extraCoins = 2;
