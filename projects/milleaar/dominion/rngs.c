@@ -33,6 +33,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 #include "rngs.h"
 
@@ -109,18 +110,18 @@ static int  initialized   = 0;          /* test for stream initialization */
  */
 {
   char ok = 0;
-
+    unsigned seed1 = time(0);
+    srand(seed1);
   if (x > 0)
     x = x % MODULUS;                       /* correct if x is too large  */
   if (x < 0)                                 
     x = ((unsigned long) time((time_t *) NULL)) % MODULUS;              
   if (x == 0)                                
     while (!ok) {
-      printf("\nEnter a positive integer seed (9 digits or less) >> ");
-      scanf("%ld", &x);
+      x = rand() % MODULUS;
       ok = (0 < x) && (x < MODULUS);
-      if (!ok)
-        printf("\nInput out of range ... try again\n");
+    //   if (!ok)
+    //     printf("\nInput out of range ... try again\n");
     }
   seed[stream] = x;
 }

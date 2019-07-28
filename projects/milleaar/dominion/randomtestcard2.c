@@ -112,7 +112,7 @@ void testMinion(int choice1, int choice2, struct gameState *post, int handPos) {
     printf("Expected: %d\t\tActual:%d\n\n", hand, post->handCount[currentPlayer]);
 
     printf("Testing Discard Count: ");
-    assert(post->discardCount[currentPlayer] == pre.discardCount[currentPlayer] + discard;
+    assert(post->discardCount[currentPlayer] == pre.discardCount[currentPlayer] + discard);
     printf("Expected: %d\t\tActual:%d\n\n", pre.discardCount[currentPlayer] + discard, post->discardCount[currentPlayer] );
 
     printf("Testing Other Players:\n ");
