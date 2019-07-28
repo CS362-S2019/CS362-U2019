@@ -23,13 +23,14 @@ void testBaron(int choice, struct gameState *post);
 int countEstates(int player, struct gameState *game);
 
 void assert(int cmp) {
-  if(cmp) 
-  {
-    printf("\n\t\t[  PASS  ]\n");
-  } else 
-  {
-    printf("\n\t\t[**FAIL**]\n");
-  }
+    if(cmp) 
+    {
+        printf("\t[  PASS  ]\n");
+    } 
+    else 
+    {
+        printf("\t[**FAIL**]\n");
+    }
 }
 
 void randomizeGame(struct gameState *G, int estateBool, int *kingdomCards){
@@ -46,15 +47,18 @@ void randomizeGame(struct gameState *G, int estateBool, int *kingdomCards){
     G->numBuys = floor(Random() * 100); //buys set to range from 0 to 99
     G->coins = floor(Random() * 100); //coins set to range from 0 to 99
     G->handCount[currentPlayer] = floor(Random() * MAX_HAND);
-    for(int i = 0; i < G->handCount[currentPlayer]; i++) {
+    for(int i = 0; i < G->handCount[currentPlayer]; i++) 
+    {
         G->hand[currentPlayer][i] = kingdomCards[ (int) floor(Random() * 10) ];
     }
     G->deckCount[currentPlayer] = floor(Random() * MAX_DECK);
-    for(int i = 0; i < G->deckCount[currentPlayer]; i++) {
+    for(int i = 0; i < G->deckCount[currentPlayer]; i++) 
+    {
         G->deck[currentPlayer][i] = kingdomCards[ (int) floor(Random() * 10) ];
     }
     G->discardCount[currentPlayer] = floor(Random() * MAX_DECK);
-    for(int i = 0; i < G->discardCount[currentPlayer]; i++) {
+    for(int i = 0; i < G->discardCount[currentPlayer]; i++) 
+    {
         G->discard[currentPlayer][i] = kingdomCards[ (int) floor(Random() * 10) ];
     }
     G->playedCardCount = floor(Random() * 100); //played cards set to range from 0 to 99
@@ -63,8 +67,9 @@ void randomizeGame(struct gameState *G, int estateBool, int *kingdomCards){
     if (estateBool)
     {
         int handEstates = floor(Random() * G->handCount[currentPlayer]);
-        for(int i = 0; i < handEstates; i++) {
-        G->hand[currentPlayer][i] = estate;
+        for(int i = 0; i < handEstates; i++) 
+        {
+            G->hand[currentPlayer][i] = estate;
         }
     }
 
@@ -85,9 +90,16 @@ void testBaron(int choice1, struct gameState *post) {
             extraCoins = 4;
             drawnCard = 0;
         }
+        else 
+        {
+            discard = 0;
+            extraCoins = 0;
+            drawnCard = 1;
+        }
     }
     else 
     {
+        discard = 0;
         extraCoins = 0;
         drawnCard = 1;
     }
@@ -95,7 +107,7 @@ void testBaron(int choice1, struct gameState *post) {
     int preEstate = countEstates(currentPlayer, &pre) + drawnCard;
     int postEstate = countEstates(currentPlayer, post);
 
-    printf("Testing with choice1 = %d\n", choice1);
+    printf("Testing with choice1 = %d, estates on hand = %d\n", choice1, preEstate);
 
     printf("Testing Buys: ");
     assert(post->numBuys == pre.numBuys + 1);
@@ -138,37 +150,35 @@ int countEstates(int player, struct gameState *G) {
 
 int main () {
 
-  int i, n, choice1;
-  
+    int i, n, choice1;
+    int k[10] = {adventurer, council_room, feast, gardens, mine,
+            remodel, smithy, village, baron, great_hall};
+    struct gameState G;
 
-  int k[10] = {adventurer, council_room, feast, gardens, mine,
-         remodel, smithy, village, baron, great_hall};
+    printf ("Testing baronEffect:\n");
+    printf ("RANDOM TESTS.\n");
 
-  struct gameState G;
+    SelectStream(2);
+    PutSeed(3);
 
-  printf ("Testing baronEffect:\n");
-
-  printf ("RANDOM TESTS.\n");
-
-  SelectStream(2);
-  PutSeed(3);
-
-  for (n = 0; n < 20000; n++) {
-    for (i = 0; i < sizeof(struct gameState); i++) {
-      ((char*)&G)[i] = floor(Random() * 256);
+    for (n = 0; n < 20000; n++) 
+    {
+        for (i = 0; i < sizeof(struct gameState); i++) 
+        {
+            ((char*)&G)[i] = floor(Random() * 256);
+        }
+        //making 0 estates in hand every 50 rounds to improve coverage
+        int estateBool = 1;
+        if(n % 50) 
+        {
+            estateBool = 0;
+        }
+        randomizeGame(&G, estateBool, k);
+        //choice1 is limited to 0 or 1 because there are only two choices
+        //makes for more even distribution between yes and no values
+        choice1 = floor(Random() * 2);
+        testBaron(choice1, &G);
     }
-    //making 0 estates in hand every 50 rounds to improve coverage
-    int estateBool = 1;
-    if(n % 50) {
-        estateBool = 0;
-    }
-    randomizeGame(&G, estateBool, k);
-    //choice1 is limited to 0 or 1 because there are only two choices
-    //makes for more even distribution between yes and no values
-    choice1 = floor(Random() * 2);
-    testBaron(choice1, &G);
-  }
 
-
-  return 0;
+    return 0;
 }

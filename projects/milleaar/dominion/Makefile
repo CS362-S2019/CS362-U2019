@@ -38,6 +38,13 @@ randomMinion: randomtestcard2.c dominion.o rngs.o
 randomTribute: randomtestcard3.c dominion.o rngs.o
 	gcc -o randomTribute -g  randomtestcard3.c dominion.o rngs.o $(CFLAGS)
 
+randomtestresults: randomBaron randomMinion randomTribute
+	./randomBaron &> randomtestresults.out
+	./randomMinion >> randomtestresults.out
+	./randomTribute >> randomtestresults.out
+	gcov dominion.c -b -f >> randomtestresults.out
+	cat dominion.c.gcov >> randomtestresults.out
+
 player: player.c interface.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
 
