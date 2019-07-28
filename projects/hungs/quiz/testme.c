@@ -15,10 +15,10 @@ char inputChar()
 
 char *inputString()
 {
-    // TODO: rewrite this 
+	// TODO: rewrite this 
 	int len = 6;
 	char og[len];
-	int a = 0; 
+	int a = 0;
 	int stringSize = len - 1;
 	int range = 116 - 101 + 1;
 	for (a = 0; a < 5; a++) {
@@ -32,6 +32,7 @@ char *inputString()
 	return returnString;
 
 }
+
 
 void testme()
 {

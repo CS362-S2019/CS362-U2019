@@ -6,7 +6,7 @@ testme: testme.c
 
 result: testme
 	./testme &> result.out
-	gcov -b testme.c >> result.out
+	gcov testme.c -b -c >> result.out
 	cat testme.c.gcov >> result.out
 
 clean:
