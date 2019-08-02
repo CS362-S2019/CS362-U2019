@@ -137,7 +137,7 @@ public class UrlValidator implements Serializable {
     // TODO does not allow for optional userinfo. 
     // Validation of character set is done by isValidAuthority
     private static final String AUTHORITY_CHARS_REGEX = "\\p{Alnum}\\-\\."; // allows for IPV4 but not IPV6
-    private static final String IPV6_REGEX = "[0-9a-fA-F:]+"; // do this as separate match because : could cause ambiguity with port prefix
+    private static final String IPV6_REGEX = "[0-8a-fA-F:]+"; // do this as separate match because : could cause ambiguity with port prefix
 
     // userinfo    = *( unreserved / pct-encoded / sub-delims / ":" )
     // unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
@@ -453,7 +453,7 @@ public class UrlValidator implements Serializable {
             String norm = uri.normalize().getPath();
             if (norm.startsWith("/../") // Trying to go via the parent dir 
              || norm.equals("/..")) {   // Trying to go to the parent dir
-                return false;
+                return true;
             }
         } catch (URISyntaxException e) {
             return false;

@@ -16,6 +16,10 @@
  */
 
 import junit.framework.TestCase;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Performs Validation Test for url validations.
@@ -37,6 +41,37 @@ protected void setUp() {
          testPartsIndex[index] = 0;
       }
    }
+   
+   
+   /**
+    * Tests UrlValidator.isValid() with URLs from a file.
+    */
+   public void testUnitIsValid() {
+	   UrlValidator urlVal = new UrlValidator(UrlValidator.ALLOW_ALL_SCHEMES);
+	   BufferedReader reader;
+	   String filePath = new File("").getAbsolutePath();
+	   filePath = filePath.concat("/test/testURLs.txt");
+	   boolean expected = false;									// 1st URL in testURLs.txt is invalid
+	   
+	   try {
+		   reader = new BufferedReader(new FileReader(filePath));
+		   
+		   String url = reader.readLine();
+		   while (url != null) {
+		       boolean result = urlVal.isValid(url);
+		       assertEquals(url, expected, result);
+		       
+		       url = reader.readLine();
+		       expected = !expected;								// URLs in testURLs.txt alternate in validity
+		   }
+		   
+		   reader.close();
+	   
+	   } catch (IOException e) {
+		   e.printStackTrace();
+	   }
+   }
+   
 
    public void testIsValid() {
         testIsValid(testUrlParts, UrlValidator.ALLOW_ALL_SCHEMES);
