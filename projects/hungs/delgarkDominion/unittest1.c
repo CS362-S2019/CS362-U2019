@@ -40,7 +40,7 @@ int main() {
 	int prevcoinCount = testG.coins;
 
 	//test when there are no estates, draw estate card
-	int r = baronEffect(0, &testG, thisPlayer);
+	int r = handleBaron(thisPlayer, 0, &testG);
 	
 	int boolean = 1;
 	
@@ -56,7 +56,7 @@ int main() {
 	}
 
 	//test when there are 1 or more estates, discard estate, will fail because of bug introduced so gcov will not be produced
-	int l = baronEffect(1, &testG, thisPlayer);
+	int l = handleBaron(thisPlayer, 1, &testG);
 
 	if (testG.coins == (prevcoinCount + 4) && l == 0) {
 		boolean = 1;
@@ -75,7 +75,7 @@ int main() {
 		testG.hand[thisPlayer][i] = copper;
 	}
 
-	int q = baronEffect(1, &testG, thisPlayer);
+	int q = handleBaron(thisPlayer, 1, &testG);
 	if (q == 1) {
 		boolean = 1;
 		char message[] = "Test estate count goes to 0\n";

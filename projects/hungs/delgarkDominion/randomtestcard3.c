@@ -54,7 +54,7 @@ int main() {
 		testG.deckCount[nextPlayer] = rand() % (MAX_DECK + 1);
 		testG.discardCount[nextPlayer] = abs(testG.deckCount[nextPlayer] - MAX_DECK);
 
-		int isPlus4 = tributeEffect(topTwo, thisPlayer, nextPlayer, &testG);
+		int isPlus4 = handleTribute(nextPlayer, thisPlayer, &testG, topTwo);
 
 		if (testG.coins == prevCoins + 4) {
 			boolean = 1;
@@ -78,7 +78,7 @@ int main() {
 
 		int prevCount = testH.handCount[thisPlayer];
 
-		int isPlusTwoCards = tributeEffect(topTwo, thisPlayer, nextPlayer, &testH);
+		int isPlusTwoCards = handleTribute(nextPlayer, thisPlayer, &testH, topTwo);
 
 		if (testH.handCount[thisPlayer] == prevCount + 2) {
 			boolean = 1;
@@ -108,7 +108,7 @@ int main() {
 
 		prevCount = testI.numActions;
 
-		int isPlus4Actions = tributeEffect(topTwo, thisPlayer, nextPlayer, &testI);
+		int isPlus4Actions = handleTribute(nextPlayer, thisPlayer, &testI, topTwo);
 
 		if (testI.numActions == prevCount + 4) {
 			boolean = 1;

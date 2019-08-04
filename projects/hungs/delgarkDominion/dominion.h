@@ -85,7 +85,7 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
 		   struct gameState *state);
 /* Responsible for initializing all supplies, and shuffling deck and
    drawing starting hands for all players.  Check that 10 cards selected
-   are in fact (different) kingdom cards, and that numPlayers is valid. 
+   are in fact (different) kingdom cards, and that numPlayers is valid.
 
 Cards not in game should initialize supply position to -1 */
 
@@ -128,14 +128,11 @@ int getWinners(int players[MAX_PLAYERS], struct gameState *state);
 /* Set array position of each player who won (remember ties!) to
    1, others to 0 */
 
-//Add refactored functions
-
-int baronEffect(int choice1, struct gameState *state, int currentPlayer);
-int minionEffect(int choice1, int choice2, int handPos, int currentPlayer, struct gameState *state);
-int ambassadorEffect(int choice1, int choice2, int handPos, int currentPlayer, struct gameState *state);
-int tributeEffect(int tributeRevealedCards[], int currentPlayer, int nextPlayer, struct gameState *state)
-int mineEffect(int choice1, int choice2, int handPos, int currentPlayer, struct gameState *state);
-
-
+// separate card functions
+int handleBaron(int currentPlayer, int choice1, struct gameState* state);
+int handleMinion(int handPos, int choice1, int choice2, int currentPlayer, struct gameState* state);
+int handleAmbassador(int choice1, int choice2, int handPos, int currentPlayer, struct gameState* state);
+int handleTribute(int currentPlayer, int nextPlayer, struct gameState* state, int* tributeRevealedCards);
+int handleMine(int choice1, int choice2, int handPos, int currentPlayer, struct gameState* state);
 
 #endif

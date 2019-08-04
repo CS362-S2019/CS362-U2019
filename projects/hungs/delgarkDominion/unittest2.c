@@ -25,7 +25,7 @@ int checkMinionOne(struct gameState *state, int playerNum) {
 		state->hand[playerNum][i] = minion;
 	}
 	int playedCount = state->playedCardCount;
-	int m = minionEffect(1, 0, 0, playerNum, state);
+	int m = handleMinion(0, 1, 0, playerNum, state);
 
 	int boolean = 1;
 
@@ -61,7 +61,7 @@ int checkMinionTwo(struct gameState *state, int playerNum) {
 		state->hand[playerNum][i] = minion;
 	}
 	int playedCount = state->playedCardCount;
-	int m = minionEffect(0, 1, 0, playerNum, state);
+	int m = handleMinion(0, 0, 1, playerNum, state);
 	
 	int boolean = 1;
 

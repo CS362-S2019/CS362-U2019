@@ -26,7 +26,7 @@ int checkMine(struct gameState *state, int playerNum) {
 	int prevHandCount = state->handCount[playerNum];
 	int playCount = state->playedCardCount;
 
-	int mine = mineEffect(1, 1, 0, playerNum, state);
+	int mine = handleMine(1, 1, 0, playerNum, state);
 
 	int boolean = 1;
 

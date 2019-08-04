@@ -25,7 +25,7 @@ int checkMinionOne(struct gameState *state, int playerNum) {
 		state->hand[playerNum][i] = minion;
 	}
 	int playedCount = state->playedCardCount;
-	int m = minionEffect(1, 0, 0, playerNum, state);
+	int m = handleMinion(0, 1, 0, playerNum, state);
 
 	int boolean = 1;
 
@@ -46,23 +46,23 @@ int checkMinionOne(struct gameState *state, int playerNum) {
 		asserttrue(boolean, message);
 	}
 
-	else  {
+	else {
 		boolean = 0;
 		char message[] = "Test trashed card\n";
 		asserttrue(boolean, message);
 	}
 
-	
+
 }
 
 int checkMinionTwo(struct gameState *state, int playerNum) {
-	
+
 	for (int i = 0; i < state->handCount[playerNum]; i++) {
 		state->hand[playerNum][i] = minion;
 	}
 	int playedCount = state->playedCardCount;
-	int m = minionEffect(0, 1, 0, playerNum, state);
-	
+	int m = handleMinion(0, 0, 1, playerNum, state);
+
 	int boolean = 1;
 
 	if (playedCount == state->playedCardCount) {
@@ -95,8 +95,9 @@ int checkMinionTwo(struct gameState *state, int playerNum) {
 		char message[] = "Test correct hand size after minion effect\n";
 		asserttrue(boolean, message);
 	}
-	
+
 }
+
 
 
 int main() {

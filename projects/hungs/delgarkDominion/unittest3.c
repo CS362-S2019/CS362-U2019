@@ -35,7 +35,7 @@ int main() {
 
 	printf("Testing Ambassador.\n");
 
-	int testOne = ambassadorEffect(1, 1, 1, thisPlayer, &testG);
+	int testOne = handleAmbassador(1, 1, 1, thisPlayer, &testG);
 
 	int boolean = 1;
 
@@ -52,7 +52,7 @@ int main() {
 
 	memcpy(&testH, &G, sizeof(struct gameState));
 
-	int testTwo = ambassadorEffect(0, 2, 1, thisPlayer, &testH);
+	int testTwo = handleAmbassador(0, 2, 1, thisPlayer, &testH);
 
 	if (testTwo == -1) {
 		boolean = 1;
