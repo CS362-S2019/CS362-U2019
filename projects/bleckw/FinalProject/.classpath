@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="URLValidatorCorrect/src"/>
+	<classpathentry kind="src" path="URLValidatorCorrect/test"/>
+	<classpathentry kind="src" path="URLValidatorInCorrect/src"/>
+	<classpathentry kind="src" path="URLValidatorInCorrect/test"/>
+	<classpathentry kind="lib" path="C:/Users/wrobe/Documents/OSU/JUnit/junit-4.13-beta-3.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
