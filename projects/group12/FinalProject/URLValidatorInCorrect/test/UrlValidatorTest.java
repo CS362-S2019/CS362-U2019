@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * Performs Validation Test for url validations.
@@ -69,6 +70,80 @@ protected void setUp() {
 	   
 	   } catch (IOException e) {
 		   e.printStackTrace();
+	   }
+   }
+   
+   
+   public void testRandomIsValid() {
+	   int numberOfTests = 1000;
+	   Random rnd = new Random();
+	   boolean expected = true;
+	   
+	   //All valid path characters
+	   String PathChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789%-._~!$&()'*+,;=";
+	   
+	   //Valid URL parts to use
+	   String[] validScheme = {	
+			   "http://",
+			   "ftp://",
+			   "h3t://"
+	   };
+	   String[] validAuthority = {
+			   "www.google.com",
+			   "www.google.com.",
+			   "go.com",
+			   "go.au",
+			   "0.0.0.0",
+			   "255.255.255.255",
+			   "255.com",
+			   "go.cc"
+	   };
+	   String [] validQuery = {
+			   "?action=view",
+			   "?action=edit&mode=up",
+			   ""
+	   };
+	   
+	   //Loop to generate URLs and test
+	   for (int i = 0; i < numberOfTests; i++) {
+		   
+		   //Generate a random port from valid port numbers (max = 65535)
+		   int portNum = rnd.nextInt(65534);
+		   String randomPort = ":" + portNum;
+		   
+		   //Generate a random path from valid path characters
+		   StringBuilder newPath = new StringBuilder("/");
+		   int rand_int1 = rnd.nextInt(10);
+		   
+		   while (newPath.length() < rand_int1) {
+			   int index = (int) (rnd.nextFloat() * PathChars.length());
+			   newPath.append(PathChars.charAt(index));
+		   }
+		   String randomPath = newPath.toString();
+		   
+		   //Randomly select index from each valid part array
+		   int schemeIndex = rnd.nextInt(3);
+		   int authIndex = rnd.nextInt(8);
+		   int queryIndex = rnd.nextInt(3);
+		   
+		   //Build a URL from test part arrays plus randomly generated port and path
+		   String testURL = validScheme[schemeIndex] + validAuthority[authIndex] + randomPort + randomPath + validQuery[queryIndex];
+		   
+		   UrlValidator urlVal = new UrlValidator(UrlValidator.ALLOW_ALL_SCHEMES);
+		   
+		   boolean result = urlVal.isValid(testURL);
+		   //urlVal.isValid(testURL);						// for debugging purposes
+		   assertEquals(testURL, expected, result);
+		   
+		   if (expected == result) {
+			   System.out.println(". " + testURL);
+		   }
+		   else {
+			   System.out.println("X " + testURL);
+		   }
+		   /*if (expected != result) {
+			   System.out.println(testURL);
+		   }*/
 	   }
    }
    
